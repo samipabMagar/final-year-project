@@ -16,6 +16,23 @@ class UserService {
 
     return userResponse;
   }
+
+  async loginUser(email, password) {
+    const user = await userModel.findOne({ where: { email } });
+    if(!user) {
+      throw new Error("User not found");
+    }
+
+    const isPassword = await user.comparePassword(password);
+    if(!isPassword) {
+      throw new Error("Invalid email or password");
+    }
+
+    const userResponse = user.toJSON();
+    delete userResponse.password;
+
+    return userResponse;
+  }
 }
 
 export default new UserService();

@@ -1,7 +1,11 @@
 import express from "express";
+import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import connection from "./configs/db.js";
 import userRoutes from "./routes/userRoutes.js";
+
+// Load environment variables
+dotenv.config();
 
 const app = express();
 
