@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import connection from "./configs/db.js";
+import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
 
@@ -15,6 +16,7 @@ const PORT = process.env.PORT || 8001;
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+app.use("/api/users", userRoutes);
 
 // Test database connection and start the server
 connection
@@ -22,12 +24,13 @@ connection
   .then(() => {
     console.log("Database connection has been established successfully.");
     return connection.sync();
+  
   })
   .then(() => {
     console.log("Database synced successfully.");
-    app.listen(PORT, () => {
+    app.listen(PORT, ()=> {
       console.log(`Server is running on port ${PORT}`);
-    });
+    })
   })
   .catch((error) => {
     console.error("Unable to connect to the database:", error);
