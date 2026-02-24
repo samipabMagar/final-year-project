@@ -1,11 +1,17 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 import connection from "./configs/db.js";
 
 const app = express();
+
+// Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 const PORT = process.env.PORT || 8001;
 
+// Routes
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
@@ -15,6 +21,10 @@ connection
   .authenticate()
   .then(() => {
     console.log("Database connection has been established successfully.");
+    return connection.sync();
+  })
+  .then(() => {
+    console.log("Database synced successfully.");
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
