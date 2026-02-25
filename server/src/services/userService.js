@@ -1,3 +1,4 @@
+import { json } from "sequelize";
 import userModel from "../models/userModel.js";
 
 // Service for user-related operations
@@ -41,6 +42,26 @@ class UserService {
     delete userResponse.password;
 
     // Parse address if it's a string
+    if (userResponse.address && typeof userResponse.address === "string") {
+      try {
+        userResponse.address = JSON.parse(userResponse.address);
+      } catch (error) {
+        console.error("Failed to parse address:", error);
+      }
+    }
+
+    return userResponse;
+  }
+
+  async getUserById(userId) {
+    const user = await userModel.findByPk(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Convert Sequelize instance to plain object and remove password
+    const userResponse = user.toJSON();
+
     if (userResponse.address && typeof userResponse.address === "string") {
       try {
         userResponse.address = JSON.parse(userResponse.address);

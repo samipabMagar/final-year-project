@@ -51,6 +51,25 @@ class UserController {
       });
     }
   }
+
+  // Get current user profile
+  async getCurrentUser(req, res) {
+    try {
+      const userId = req.user.id;
+      const user = await userService.getUserById(userId);
+
+      res.status(200).json({
+        success: true,
+        message: "User profile retrieved successfully",
+        data: user,
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message || "Failed to get user profile",
+      });
+    }
+  }
 }
 
 export default new UserController();
