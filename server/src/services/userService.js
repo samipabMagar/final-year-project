@@ -14,22 +14,40 @@ class UserService {
     const userResponse = user.toJSON();
     delete userResponse.password;
 
+    // Parse address if it's a string
+    if (userResponse.address && typeof userResponse.address === "string") {
+      try {
+        userResponse.address = JSON.parse(userResponse.address);
+      } catch (error) {
+        console.error("Failed to parse address:", error);
+      }
+    }
+
     return userResponse;
   }
 
   async loginUser(email, password) {
     const user = await userModel.findOne({ where: { email } });
-    if(!user) {
+    if (!user) {
       throw new Error("User not found");
     }
 
     const isPassword = await user.comparePassword(password);
-    if(!isPassword) {
+    if (!isPassword) {
       throw new Error("Invalid email or password");
     }
 
     const userResponse = user.toJSON();
     delete userResponse.password;
+
+    // Parse address if it's a string
+    if (userResponse.address && typeof userResponse.address === "string") {
+      try {
+        userResponse.address = JSON.parse(userResponse.address);
+      } catch (error) {
+        console.error("Failed to parse address:", error);
+      }
+    }
 
     return userResponse;
   }
