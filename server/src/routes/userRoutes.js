@@ -6,11 +6,12 @@ import { authenticate } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
+// Public routes
 router.post("/register", validate(registerSchema), userController.register);
 router.post("/login", validate(loginSchema), userController.login);
 
 // Protected routes (require authentication)
 router.get("/profile", authenticate, userController.getCurrentUser);
-
+router.post("/logout", authenticate, userController.logout);
 
 export default router;
