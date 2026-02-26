@@ -75,6 +75,28 @@ class UserService {
 
     return userResponse;
   }
+
+  // Update user profile
+  async updateUserProfile(userId, updateData){
+    const user = await userModel.findByPk(userId);
+    if(!user) {
+      throw new Error("User not found");
+    }
+
+    await user.update(updateData);
+
+    const updatedUser = user.toJSON();
+    delete updatedUser.password;
+
+    if(updatedUser.address && typeof updatedUser.address === "string") {
+      try {
+        updatedUser.address = JSON.parse(updatedUser.address);
+      }catch (error) {
+        console.error("Failed to parse address:", error);
+      }
+    }
+    return updatedUser;
+  }
 }
 
 export default new UserService();

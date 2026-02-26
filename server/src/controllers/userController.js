@@ -91,26 +91,25 @@ class UserController {
     }
   }
 
-  // // Logout user
-  // async logout(req, res) {
-  //   try {
-  //     // Clear the token cookie
-  //     res.clearCookie("token", {
-  //       httpOnly: true,
-  //       secure: process.env.NODE_ENV === "production",
-  //     });
+  // Update user profile
+  async updateProfile(req, res) {
+    try {
+      const userId = req.user.id;
+      const updateData = req.body;
+      const updateUser = await userService.updateUserProfile(userId, updateData);
 
-  //     res.status(200).json({
-  //       success: true,
-  //       message: "User logged out successfully",
-  //     });
-  //   } catch (error) {
-  //     res.status(500).json({
-  //       success: false,
-  //       message: error.message || "Failed to logout user",
-  //     });
-  //   }
-  // }
+      res.status(200).json({
+        success: true,
+        message: "User profile updated successfully",
+        data: updateUser,
+      })
+    }catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message || "Failed to update user profile",
+      });
+    }
+  }
 }
 
 export default new UserController();

@@ -80,3 +80,47 @@ export const loginSchema = z.object({
     })
     .min(1, "Password is required"),
 });
+
+// Validation schema for updating user profile
+export const updateProfileSchema = z.object({
+  full_name: z
+    .string()
+    .min(2, "Full name must be at least 2 characters")
+    .max(100, "Full name must not exceed 100 characters")
+    .trim()
+    .optional(),
+
+  phone: z
+    .string()
+    .min(10, "Phone number must be at least 10 characters")
+    .max(30, "Phone number must not exceed 30 characters")
+    .regex(/^[0-9+\-\s()]+$/, "Invalid phone number format")
+    .trim()
+    .optional(),
+
+  gender: z
+    .enum(["male", "female", "other"], {
+      invalid_type_error: "Gender must be either male, female, or other",
+    })
+    .optional(),
+
+  skin_type: z
+    .enum(["normal", "oily", "dry", "combination", "sensitive"], {
+      invalid_type_error:
+        "Skin type must be normal, oily, dry, combination, or sensitive",
+    })
+    .optional()
+    .nullable(),
+
+  address: z
+    .object({
+      city: z.string().min(1, "City is required"),
+      province: z.string().min(1, "Province is required"),
+    })
+    .optional()
+    .nullable(),
+
+  profile_image: z.string().max(255).optional().nullable(),
+}).strict();
+
+
