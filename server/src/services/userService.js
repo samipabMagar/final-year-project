@@ -53,8 +53,11 @@ class UserService {
     return userResponse;
   }
 
+  // Get user by ID
   async getUserById(userId) {
-    const user = await userModel.findByPk(userId);
+    const user = await userModel.findByPk(userId, {
+      attributes: { exclude: ["password"] },
+    });
     if (!user) {
       throw new Error("User not found");
     }

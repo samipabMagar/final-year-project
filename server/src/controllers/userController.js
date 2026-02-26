@@ -43,7 +43,6 @@ class UserController {
         success: true,
         message: "User logged in successfully",
         data: user,
-        token: token
       });
     } catch (error) {
       res.status(400).json({
@@ -72,38 +71,25 @@ class UserController {
     }
   }
 
-
   // Logout user
   async logout(req, res) {
     try {
       res.clearCookie("token", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-      })
+      });
 
       res.status(200).json({
         success: true,
         message: "User logged out successfully",
-      })
+      });
     } catch (error) {
       res.status(500).json({
         success: false,
         message: error.message || "Failed to logout user",
-      })
+      });
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
 
   // // Logout user
   // async logout(req, res) {
@@ -125,8 +111,6 @@ class UserController {
   //     });
   //   }
   // }
-
-  
 }
 
 export default new UserController();
