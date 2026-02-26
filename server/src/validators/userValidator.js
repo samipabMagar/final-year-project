@@ -82,71 +82,74 @@ export const loginSchema = z.object({
 });
 
 // Validation schema for updating user profile
-export const updateProfileSchema = z.object({
-  full_name: z
-    .string()
-    .min(2, "Full name must be at least 2 characters")
-    .max(100, "Full name must not exceed 100 characters")
-    .trim()
-    .optional(),
+export const updateProfileSchema = z
+  .object({
+    full_name: z
+      .string()
+      .min(2, "Full name must be at least 2 characters")
+      .max(100, "Full name must not exceed 100 characters")
+      .trim()
+      .optional(),
 
-  phone: z
-    .string()
-    .min(10, "Phone number must be at least 10 characters")
-    .max(30, "Phone number must not exceed 30 characters")
-    .regex(/^[0-9+\-\s()]+$/, "Invalid phone number format")
-    .trim()
-    .optional(),
+    phone: z
+      .string()
+      .min(10, "Phone number must be at least 10 characters")
+      .max(30, "Phone number must not exceed 30 characters")
+      .regex(/^[0-9+\-\s()]+$/, "Invalid phone number format")
+      .trim()
+      .optional(),
 
-  gender: z
-    .enum(["male", "female", "other"], {
-      invalid_type_error: "Gender must be either male, female, or other",
-    })
-    .optional(),
+    gender: z
+      .enum(["male", "female", "other"], {
+        invalid_type_error: "Gender must be either male, female, or other",
+      })
+      .optional(),
 
-  skin_type: z
-    .enum(["normal", "oily", "dry", "combination", "sensitive"], {
-      invalid_type_error:
-        "Skin type must be normal, oily, dry, combination, or sensitive",
-    })
-    .optional()
-    .nullable(),
+    skin_type: z
+      .enum(["normal", "oily", "dry", "combination", "sensitive"], {
+        invalid_type_error:
+          "Skin type must be normal, oily, dry, combination, or sensitive",
+      })
+      .optional()
+      .nullable(),
 
-  address: z
-    .object({
-      city: z.string().min(1, "City is required"),
-      province: z.string().min(1, "Province is required"),
-    })
-    .optional()
-    .nullable(),
+    address: z
+      .object({
+        city: z.string().min(1, "City is required"),
+        province: z.string().min(1, "Province is required"),
+      })
+      .optional()
+      .nullable(),
 
-  profile_image: z.string().max(255).optional().nullable(),
-}).strict();
+    profile_image: z.string().max(255).optional().nullable(),
+  })
+  .strict();
 
 // Validation schema for changing user password
-export const changePasswordSchema = z.object({
-  current_password: z.string({
-    required_error: "Current password is required",
-  })
-  .min(1, "Current password is required"),
+export const changePasswordSchema = z
+  .object({
+    current_password: z
+      .string({
+        required_error: "Current password is required",
+      })
+      .min(1, "Current password is required"),
 
-  new_password: z.string({
-    required_error: "New password is required",
-  })
-  .min(8, "New password must be at least 8 characters")
-  .max(255, "New password must not exceed 255 characters")
-  .regex(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-    "New password must contain at least one uppercase letter, one lowercase letter, and one number",
-  ),
+    new_password: z
+      .string({
+        required_error: "New password is required",
+      })
+      .min(8, "New password must be at least 8 characters")
+      .max(255, "New password must not exceed 255 characters")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+        "New password must contain at least one uppercase letter, one lowercase letter, and one number",
+      ),
 
-  confirm_new_password: z.string({
-    required_error: "Confirm new password is required",
+    confirm_new_password: z.string({
+      required_error: "Confirm new password is required",
+    }),
   })
   .refine((data) => data.new_password === data.confirm_new_password, {
-  message: "New password and confirm new password must match",
-  path: ["confirm_new_password"],
-})
-})
-
-
+    message: "New password and confirm new password must match",
+    path: ["confirm_new_password"],
+  });
