@@ -111,12 +111,26 @@ class UserService {
     }
 
     const isSamePassword = await user.comparePassword(new_password);
-    if(isSamePassword) {
-      throw new Error("New password must be different from the current password");
+    if (isSamePassword) {
+      throw new Error(
+        "New password must be different from the current password",
+      );
     }
     // Update the password (the beforeUpdate hook will handle hashing)
     await user.update({ password: new_password });
-    
+  }
+
+  // Update profile image
+  async updateProfileImage(userId, imagePath) {
+    const user = await userModel.findByPk(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const oldImagePath = user.profile_image;
+    await user.update({ profile_image: imagePath });
+
+    return { oldImagePath };
   }
 }
 

@@ -1,5 +1,6 @@
 import { generateToken } from "../helpers/jwtHelper.js";
 import userService from "../services/userService.js";
+import { deleteOldImage } from "../configs/multerConfig.js";
 
 // Controller for user-related operations
 class UserController {
@@ -133,6 +134,36 @@ class UserController {
       res.status(400).json({
         success: false,
         message: error.message || "Failed to change password",
+      });
+    }
+  }
+
+  // Upload profile image
+  async uploadProfileImage(req, res) {
+    try {
+      if (!req.file) {
+        return res.status(400).json({
+          success: false,
+          message: "Please upload an image file",
+        });
+      }
+
+      const imagePath = `uploads/profiles/${req.file.filename}`;
+      const { oldImagePath } = await userService.updateProfileImage(
+        req.user.id,
+        imagePath,
+      );
+
+      if (oldImagePath) deleteOldImage(oldImagePath);
+
+      res.status(200).json({
+        success: true,
+        message: "Profile image uploaded successfully",
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message || "Failed to upload profile image",
       });
     }
   }

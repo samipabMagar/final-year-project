@@ -5,7 +5,7 @@ import helmet from "helmet";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import connection from "./configs/db.js";
-import userRoutes from "./routes/userRoutes.js";
+import routes from "./routes/index.js";
 
 // Load environment variables
 dotenv.config();
@@ -38,13 +38,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// Serve static files from uploads directory
+app.use("/uploads", express.static("uploads"));
+
 const PORT = process.env.PORT || 8001;
 
 // Routes
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("eDermaCare API - Server is running");
 });
-app.use("/api/users", userRoutes);
+
+// Mount all API routes
+app.use("/api", routes);
 
 // Test database connection and start the server
 connection
