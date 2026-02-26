@@ -1,5 +1,6 @@
 import { verifyToken } from "../helpers/jwtHelper.js";
 
+// Middleware to authenticate user using JWT token
 export const authenticate = async (req, res, next) => {
   try {
     const token = req.cookies.token;

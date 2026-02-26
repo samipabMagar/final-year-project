@@ -77,9 +77,9 @@ class UserService {
   }
 
   // Update user profile
-  async updateUserProfile(userId, updateData){
+  async updateUserProfile(userId, updateData) {
     const user = await userModel.findByPk(userId);
-    if(!user) {
+    if (!user) {
       throw new Error("User not found");
     }
 
@@ -88,14 +88,35 @@ class UserService {
     const updatedUser = user.toJSON();
     delete updatedUser.password;
 
-    if(updatedUser.address && typeof updatedUser.address === "string") {
+    if (updatedUser.address && typeof updatedUser.address === "string") {
       try {
         updatedUser.address = JSON.parse(updatedUser.address);
-      }catch (error) {
+      } catch (error) {
         console.error("Failed to parse address:", error);
       }
     }
     return updatedUser;
+  }
+
+  // Change user password
+  async changeUserPassword(userId, current_password, new_password) {
+    const user = await userModel.findByPk(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const isPassword = await user.comparePassword(current_password);
+    if (!isPassword) {
+      throw new Error("Current password is incorrect");
+    }
+
+    const isSamePassword = await user.comparePassword(new_password);
+    if(isSamePassword) {
+      throw new Error("New password must be different from the current password");
+    }
+    // Update the password (the beforeUpdate hook will handle hashing)
+    await user.update({ password: new_password });
+    
   }
 }
 

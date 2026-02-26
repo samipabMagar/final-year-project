@@ -123,4 +123,30 @@ export const updateProfileSchema = z.object({
   profile_image: z.string().max(255).optional().nullable(),
 }).strict();
 
+// Validation schema for changing user password
+export const changePasswordSchema = z.object({
+  current_password: z.string({
+    required_error: "Current password is required",
+  })
+  .min(1, "Current password is required"),
+
+  new_password: z.string({
+    required_error: "New password is required",
+  })
+  .min(8, "New password must be at least 8 characters")
+  .max(255, "New password must not exceed 255 characters")
+  .regex(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+    "New password must contain at least one uppercase letter, one lowercase letter, and one number",
+  ),
+
+  confirm_new_password: z.string({
+    required_error: "Confirm new password is required",
+  })
+  .refine((data) => data.new_password === data.confirm_new_password, {
+  message: "New password and confirm new password must match",
+  path: ["confirm_new_password"],
+})
+})
+
 

@@ -96,17 +96,43 @@ class UserController {
     try {
       const userId = req.user.id;
       const updateData = req.body;
-      const updateUser = await userService.updateUserProfile(userId, updateData);
+      const updateUser = await userService.updateUserProfile(
+        userId,
+        updateData,
+      );
 
       res.status(200).json({
         success: true,
         message: "User profile updated successfully",
         data: updateUser,
-      })
-    }catch (error) {
+      });
+    } catch (error) {
       res.status(400).json({
         success: false,
         message: error.message || "Failed to update user profile",
+      });
+    }
+  }
+
+  // Change user password
+  async changePassword(req, res) {
+    try {
+      const userId = req.user.id;
+      const { current_password, new_password } = req.body;
+      await userService.changeUserPassword(
+        userId,
+        current_password,
+        new_password,
+      );
+
+      res.status(200).json({
+        success: true,
+        message: "Password changed successfully",
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message || "Failed to change password",
       });
     }
   }
