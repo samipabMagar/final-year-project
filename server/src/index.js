@@ -5,6 +5,7 @@ import helmet from "helmet";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import connection from "./configs/db.js";
+import "./models/index.js"; 
 import routes from "./routes/index.js";
 
 // Load environment variables
@@ -56,7 +57,7 @@ connection
   .authenticate()
   .then(() => {
     console.log("Database connection has been established successfully.");
-    return connection.sync();
+    return connection.sync({alter:true});
   
   })
   .then(() => {
