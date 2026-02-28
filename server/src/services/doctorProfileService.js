@@ -1,7 +1,7 @@
 import connection from "../configs/db.js";
 import userModel from "../models/userModel.js";
 import doctorProfileModel from "../models/doctorProfileModel.js";
-import { sendDoctorApprovalEmail } from "../../../../fyp development/server/utils/emailService.js";
+import { sendDoctorApprovalEmail } from "../helpers/emailHelper.js";
 
 class DoctorProfileService {
   // Register as doctor (Public)
@@ -111,6 +111,13 @@ class DoctorProfileService {
   async approveDoctor(userId) {
     const profile = await doctorProfileModel.findOne({
       where: { user_id: userId },
+      include: [
+        {
+          model: userModel,
+          as: "user",
+          attributes: ["user_id", "full_name", "email", "phone"],
+        },
+      ],
     });
 
     if (!profile) {
@@ -127,29 +134,14 @@ class DoctorProfileService {
       rejection_reason: null,
     });
 
-    // Get full profile with user data
-    const approvedProfile = await doctorProfileModel.findOne({
-      where: {user_id: userId},
-      include: [
-        {
-          model: userModel,
-          as: "user",
-          attributes: ["user_id", "full_name", "email", "phone"],
-        }
-      ]
-    })
-
     // send approval email to doctor
     try {
-      await sendDoctorApprovalEmail({
-        email: approvedProfile.user.email,
-        doctorName: approvedProfile.user.full_name,
-      })
-    }catch(error){
+      await sendDoctorApprovalEmail(profile.user.email, profile.user.full_name);
+    } catch (error) {
       console.error("Failed to send approval email:", error);
     }
 
-    return approvedProfile.toJSON();
+    return profile.toJSON();
   }
 }
 

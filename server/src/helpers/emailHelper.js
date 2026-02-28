@@ -1,4 +1,4 @@
-import transporter from "../configs/email";
+import transporter from "../configs/email.js";
 
 const sendEmail = async (to, subject, html) => {
   try {
@@ -26,9 +26,5 @@ export const sendDoctorApprovalEmail = async (email, doctorName) => {
         <br/>
         <p>Thank you for joining us!</p>`;
 
-  try {
-    return await sendEmail(userEmail, subject, html);
-  } catch (error) {
-    console.error("Failed to send approval email:", error.message);
-  }
+  return await sendEmail(email, subject, html);
 };
