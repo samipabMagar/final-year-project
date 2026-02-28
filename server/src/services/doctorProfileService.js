@@ -1,6 +1,7 @@
 import connection from "../configs/db.js";
 import userModel from "../models/userModel.js";
 import doctorProfileModel from "../models/doctorProfileModel.js";
+import { sendDoctorApprovalEmail } from "../../../../fyp development/server/utils/emailService.js";
 
 class DoctorProfileService {
   // Register as doctor (Public)
@@ -137,6 +138,16 @@ class DoctorProfileService {
         }
       ]
     })
+
+    // send approval email to doctor
+    try {
+      await sendDoctorApprovalEmail({
+        email: approvedProfile.user.email,
+        doctorName: approvedProfile.user.full_name,
+      })
+    }catch(error){
+      console.error("Failed to send approval email:", error);
+    }
 
     return approvedProfile.toJSON();
   }
