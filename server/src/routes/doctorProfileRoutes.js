@@ -7,11 +7,26 @@ import { authorize } from "../middlewares/authorizeMiddleware.js";
 
 const router = express.Router();
 
+// Doctor registration route (Public)
 router.post(
   "/register",
   validate(registerDoctorSchema),
   doctorProfileController.registerDoctor,
 );
 
-router.get("/admin/pending",authenticate,authorize("admin"),doctorProfileController.getPendingDoctorRegistrations);
+
+// Admin routes for managing doctor registrations
+router.get(
+  "/admin/pending",
+  authenticate,
+  authorize("admin"),
+  doctorProfileController.getPendingDoctorRegistrations,
+);
+router.put(
+  "/admin/:userId/approve",
+  authenticate,
+  authorize("admin"),
+  doctorProfileController.approveDoctorRegistration,
+);
+
 export default router;

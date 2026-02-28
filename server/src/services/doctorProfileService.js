@@ -105,6 +105,41 @@ class DoctorProfileService {
 
     return profiles.map((profile) => profile.toJSON());
   }
+
+  // Approve doctor registration (Admin only)
+  async approveDoctor(userId) {
+    const profile = await doctorProfileModel.findOne({
+      where: { user_id: userId },
+    });
+
+    if (!profile) {
+      throw new Error("Doctor profile not found");
+    }
+
+    if (profile.approval_status == "approved") {
+      throw new Error("Doctor is already approved");
+    }
+
+    await profile.update({
+      approval_status: "approved",
+      approved_at: new Date(),
+      rejection_reason: null,
+    });
+
+    // Get full profile with user data
+    const approvedProfile = await doctorProfileModel.findOne({
+      where: {user_id: userId},
+      include: [
+        {
+          model: userModel,
+          as: "user",
+          attributes: ["user_id", "full_name", "email", "phone"],
+        }
+      ]
+    })
+
+    return approvedProfile.toJSON();
+  }
 }
 
 export default new DoctorProfileService();
