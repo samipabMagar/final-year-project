@@ -20,6 +20,25 @@ class DoctorProfileController {
       });
     }
   }
+
+  // Admin: Get pending doctor registrations
+  async getPendingDoctorRegistrations(req, res) {
+    try {
+      const pendingDoctors = await doctorProfileService.getPendingDoctors();
+
+      res.status(200).json({
+        success: true,
+        message: "Pending doctor registrations retrieved successfully",
+        data: pendingDoctors,
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message:
+          error.message || "Failed to retrieve pending doctor registrations",
+      });
+    }
+  }
 }
 
 export default new DoctorProfileController();

@@ -11,4 +11,5 @@ router.post(
   doctorProfileController.registerDoctor,
 );
 
+router.get("/admin/pending",doctorProfileController.getPendingDoctorRegistrations);
 export default router;

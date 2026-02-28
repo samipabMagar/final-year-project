@@ -82,7 +82,29 @@ class DoctorProfileService {
       throw error;
     }
   }
-}
+  // Get pending doctor approvals (Admin only)
+  async getPendingDoctors() {
+    const profiles = await doctorProfileModel.findAll({
+      where: { approval_status: "pending" },
+      include: [
+        {
+          model: userModel,
+          as: "user",
+          attributes: [
+            "user_id",
+            "full_name",
+            "email",
+            "phone",
+            "profile_image",
+            "created_at",
+          ],
+        },
+      ],
+      order: [["created_at", "ASC"]],
+    });
 
+    return profiles.map((profile) => profile.toJSON());
+  }
+}
 
 export default new DoctorProfileService();
