@@ -1,5 +1,6 @@
 import { json } from "sequelize";
 import userModel from "../models/userModel.js";
+import doctorProfileModel from "../models/doctorProfileModel.js";
 
 // Service for user-related operations
 class UserService {
@@ -36,6 +37,27 @@ class UserService {
     const isPassword = await user.comparePassword(password);
     if (!isPassword) {
       throw new Error("Invalid email or password");
+    }
+
+    // If the user is a doctor, check their approval status
+    if (user.role === "doctor") {
+      const doctorProfile = await doctorProfileModel.findOne({
+        where: { user_id: user.user_id },
+      });
+
+      if (doctorProfile) {
+        if (doctorProfile.approval_status === "pending") {
+          throw new Error(
+            "Your registration is currently under review. Please wait for admin approval before logging in.",
+          );
+        }
+        if (doctorProfile.approval_status === "rejected") {
+          const rejectionMessage = doctorProfile.rejection_reason
+            ? `Your registration has been rejected. Reason: ${doctorProfile.rejection_reason}`
+            : "Your registration has been rejected. Please contact support for more information.";
+          throw new Error(rejectionMessage);
+        }
+      }
     }
 
     const userResponse = user.toJSON();
