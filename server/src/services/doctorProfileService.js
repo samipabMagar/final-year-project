@@ -1,7 +1,10 @@
 import connection from "../configs/db.js";
 import userModel from "../models/userModel.js";
 import doctorProfileModel from "../models/doctorProfileModel.js";
-import { sendDoctorApprovalEmail } from "../helpers/emailHelper.js";
+import {
+  sendDoctorApprovalEmail,
+  sendDoctorRejectionEmail,
+} from "../helpers/emailHelper.js";
 
 class DoctorProfileService {
   // Register as doctor (Public)
@@ -139,6 +142,46 @@ class DoctorProfileService {
       await sendDoctorApprovalEmail(profile.user.email, profile.user.full_name);
     } catch (error) {
       console.error("Failed to send approval email:", error);
+    }
+
+    return profile.toJSON();
+  }
+
+  // Reject doctor registration (Admin only)
+  async rejectDoctor(userId, reason) {
+    const profile = await doctorProfileModel.findOne({
+      where: { user_id: userId },
+      include: [
+        {
+          model: userModel,
+          as: "user",
+          attributes: ["user_id", "full_name", "email", "phone"],
+        },
+      ],
+    });
+
+    if (!profile) {
+      throw new Error("Doctor profile not found");
+    }
+
+    if (profile.approval_status == "rejected") {
+      throw new Error("Doctor is already rejected");
+    }
+
+    await profile.update({
+      approval_status: "rejected",
+      rejection_reason: reason || "No reason provided",
+      approved_at: new Date(),
+    });
+
+    try {
+      await sendDoctorRejectionEmail(
+        profile.user.email,
+        profile.user.full_name,
+        reason,
+      );
+    } catch (error) {
+      console.error("Failed to send rejection email:", error);
     }
 
     return profile.toJSON();

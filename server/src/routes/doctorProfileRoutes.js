@@ -14,7 +14,6 @@ router.post(
   doctorProfileController.registerDoctor,
 );
 
-
 // Admin routes for managing doctor registrations
 router.get(
   "/admin/pending",
@@ -27,6 +26,12 @@ router.put(
   authenticate,
   authorize("admin"),
   doctorProfileController.approveDoctorRegistration,
+);
+router.put(
+  "/admin/:userId/reject",
+  authenticate,
+  authorize("admin"),
+  doctorProfileController.rejectDoctorRegistration,
 );
 
 export default router;

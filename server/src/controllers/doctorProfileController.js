@@ -59,6 +59,30 @@ class DoctorProfileController {
       });
     }
   }
+
+  // Admin: Reject doctor registration
+  async rejectDoctorRegistration(req, res) {
+    try {
+      const { userId } = req.params;
+      const rejection_reason = req.body?.rejection_reason || ""
+
+      const result = await doctorProfileService.rejectDoctor(
+        parseInt(userId),
+        rejection_reason,
+      );
+
+      res.status(200).json({
+        success: true,
+        message: "Doctor registration rejected successfully",
+        data: result,
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message || "Failed to reject doctor registration",
+      });
+    }
+  }
 }
 
 export default new DoctorProfileController();
