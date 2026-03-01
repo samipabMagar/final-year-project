@@ -7,6 +7,9 @@ import { authorize } from "../middlewares/authorizeMiddleware.js";
 
 const router = express.Router();
 
+// Get all doctors
+router.get("/", doctorProfileController.getAllDoctors);
+
 // Doctor registration route (Public)
 router.post(
   "/register",

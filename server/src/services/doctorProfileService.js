@@ -186,6 +186,39 @@ class DoctorProfileService {
 
     return profile.toJSON();
   }
+
+  // Get all doctor profiles
+  async getAllDoctors(filters = {}) {
+    const whereClause = {};
+
+    if (filters.specialization) {
+      whereClause.specialization = filters.specialization;
+    }
+
+    if (filters.is_available !== undefined) {
+      whereClause.is_available = filters.is_available;
+    }
+
+    const profiles = await doctorProfileModel.findAll({
+      where: whereClause,
+      include: [
+        {
+          model: userModel,
+          as: "user",
+          attributes: [
+            "user_id",
+            "full_name",
+            "email",
+            "phone",
+            "profile_image",
+          ],
+        },
+      ],
+      order: [["rating", "DESC"]],
+    });
+
+    return profiles.map((profile) => profile.toJSON());
+  }
 }
 
 export default new DoctorProfileService();
