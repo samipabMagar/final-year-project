@@ -4,7 +4,7 @@ import doctorProfileModel from "../models/doctorProfileModel.js";
 import {
   sendDoctorApprovalEmail,
   sendDoctorRejectionEmail,
-} from "../helpers/emailHelper.js";
+} from "../utils/emailService.js";
 
 class DoctorProfileService {
   // Register as doctor (Public)
