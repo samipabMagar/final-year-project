@@ -16,6 +16,8 @@ router.post(
   validate(registerDoctorSchema),
   doctorProfileController.registerDoctor,
 );
+router.get("/profile/me", authenticate, authorize("doctor"), doctorProfileController.getMyProfile);
+
 
 // Admin routes for managing doctor registrations
 router.get(

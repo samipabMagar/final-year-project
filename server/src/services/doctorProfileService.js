@@ -219,6 +219,26 @@ class DoctorProfileService {
 
     return profiles.map((profile) => profile.toJSON());
   }
+
+  // Get doctor profile by user ID
+  async getDoctorProfileByUserId(userId){
+    const profile = await doctorProfileModel.findOne({
+      where: {user_id: userId},
+      include: [
+        {
+          model: userModel,
+          as: "user",
+          attributes: ["user_id", "full_name", "email", "phone", "profile_image"],
+        }
+      ]
+    })
+
+    if(!profile){
+      throw new Error("Doctor profile not found");
+    }
+
+    return profile.toJSON();
+  }
 }
 
 export default new DoctorProfileService();
