@@ -221,21 +221,54 @@ class DoctorProfileService {
   }
 
   // Get doctor profile by user ID
-  async getDoctorProfileByUserId(userId){
+  async getDoctorProfileByUserId(userId) {
     const profile = await doctorProfileModel.findOne({
-      where: {user_id: userId},
+      where: { user_id: userId },
       include: [
         {
           model: userModel,
           as: "user",
-          attributes: ["user_id", "full_name", "email", "phone", "profile_image"],
-        }
-      ]
-    })
+          attributes: [
+            "user_id",
+            "full_name",
+            "email",
+            "phone",
+            "profile_image",
+          ],
+        },
+      ],
+    });
 
-    if(!profile){
+    if (!profile) {
       throw new Error("Doctor profile not found");
     }
+
+    return profile.toJSON();
+  }
+
+  // Update doctor profile
+  async updateDoctorProfile(userId, updateData) {
+    const profile = await doctorProfileModel.findOne({
+      where: { user_id: userId },
+    });
+
+    if (!profile) {
+      throw new Error("Doctor profile not found");
+    }
+
+    if (
+      updateData.license_number &&
+      updateData.license_number !== profile.license_number
+    ) {
+      const licenseExists = await doctorProfileModel.findOne({
+        where: { license_number: updateData.license_number },
+      });
+      if (licenseExists) {
+        throw new Error("License number already exists");
+      }
+    }
+
+    await profile.update(updateData);
 
     return profile.toJSON();
   }

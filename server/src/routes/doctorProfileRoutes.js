@@ -1,7 +1,10 @@
 import express from "express";
 import doctorProfileController from "../controllers/doctorProfileController.js";
 import { validate } from "../middlewares/validateMiddleware.js";
-import { registerDoctorSchema } from "../validators/doctorProfileValidator.js";
+import {
+  registerDoctorSchema,
+  updateDoctorProfileSchema,
+} from "../validators/doctorProfileValidator.js";
 import { authenticate } from "../middlewares/authMiddleware.js";
 import { authorize } from "../middlewares/authorizeMiddleware.js";
 
@@ -16,8 +19,19 @@ router.post(
   validate(registerDoctorSchema),
   doctorProfileController.registerDoctor,
 );
-router.get("/profile/me", authenticate, authorize("doctor"), doctorProfileController.getMyProfile);
-
+router.get(
+  "/profile",
+  authenticate,
+  authorize("doctor"),
+  doctorProfileController.getMyProfile,
+);
+router.put(
+  "/profile",
+  authenticate,
+  authorize("doctor"),
+  validate(updateDoctorProfileSchema),
+  doctorProfileController.updateProfile,
+);
 
 // Admin routes for managing doctor registrations
 router.get(

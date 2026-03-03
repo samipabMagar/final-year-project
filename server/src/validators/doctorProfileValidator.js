@@ -5,7 +5,7 @@ const time12hRegex = /^(0?[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)$/i; // Regular expre
 // Helper function to convert 12-hour time format to minutes for comparison
 const toMinutes = (time) => {
   const [timePart, period] = time.trim().toUpperCase().split(" ");
-  let [hours, minutes] = timePart.split(":").map(Number);
+  let [hours, minutes] = timePart.split(":").map(num => Number(num));
 
   if (period === "PM" && hours !== 12) hours += 12;
   if (period === "AM" && hours === 12) hours = 0;
@@ -126,4 +126,64 @@ export const registerDoctorSchema = z.object({
     .optional(),
 
   is_available: z.boolean().default(true),
+});
+
+export const updateDoctorProfileSchema = z.object({
+  specialization: z
+    .string()
+    .min(1, "Specialization is required")
+    .max(100, "Specialization must not exceed 100 characters")
+    .trim()
+    .optional(),
+
+  license_number: z
+    .string()
+    .min(1, "License number is required")
+    .max(50, "License number must not exceed 50 characters")
+    .trim()
+    .optional(),
+
+  years_of_experience: z.coerce
+    .number()
+    .int("Years of experience must be an integer")
+    .min(0, "Years of experience cannot be negative")
+    .optional(),
+
+  consultation_fee: z.coerce
+    .number()
+    .min(0, "Consultation fee cannot be negative")
+    .max(10000, "Consultation fee must not exceed 10000")
+    .optional(),
+
+  bio: z
+    .string()
+    .trim()
+    .max(1000, "Bio must not exceed 1000 characters")
+    .optional(),
+
+  education: z
+    .array(
+      z.object({
+        degree: z.string(),
+        institution: z.string(),
+        year: z.coerce.number().int().min(1950).max(new Date().getFullYear()),
+      }),
+    )
+    .optional(),
+
+  certifications: z.array(z.string()).optional(),
+
+  availability_hours: z
+    .object({
+      monday: daySchema.optional(),
+      tuesday: daySchema.optional(),
+      wednesday: daySchema.optional(),
+      thursday: daySchema.optional(),
+      friday: daySchema.optional(),
+      saturday: daySchema.optional(),
+      sunday: daySchema.optional(),
+    })
+    .optional(),
+
+  is_available: z.boolean().optional(),
 });

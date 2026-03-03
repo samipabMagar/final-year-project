@@ -127,6 +127,30 @@ class DoctorProfileController {
       });
     }
   }
+
+  // Doctor updates their profile
+  async updateProfile(req, res) {
+    try {
+      const userId = req.user.id;
+      const profileData = req.body;
+
+      const updatedProfile = await doctorProfileService.updateDoctorProfile(
+        userId,
+        profileData,
+      );
+
+      res.status(200).json({
+        success: true,
+        message: "Doctor profile updated successfully",
+        data: updatedProfile,
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message || "Failed to update doctor profile",
+      });
+    }
+  }
 }
 
 export default new DoctorProfileController();
