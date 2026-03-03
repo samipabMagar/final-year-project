@@ -272,6 +272,21 @@ class DoctorProfileService {
 
     return profile.toJSON();
   }
+
+  // Toggle doctor availability
+  async updateDoctorAvailability(userId) {
+    const profile = await doctorProfileModel.findOne({
+      where: { user_id: userId },
+    });
+
+    if (!profile) {
+      throw new Error("Doctor profile not found");
+    }
+
+    await profile.update({ is_available: !profile.is_available });
+
+    return profile.toJSON();
+  }
 }
 
 export default new DoctorProfileService();

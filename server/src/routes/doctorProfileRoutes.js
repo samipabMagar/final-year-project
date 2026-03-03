@@ -32,6 +32,7 @@ router.put(
   validate(updateDoctorProfileSchema),
   doctorProfileController.updateProfile,
 );
+router.patch("/profile/availability", authenticate, authorize("doctor"), doctorProfileController.updateAvailability);
 
 // Admin routes for managing doctor registrations
 router.get(

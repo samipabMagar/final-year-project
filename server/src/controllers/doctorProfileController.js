@@ -151,6 +151,26 @@ class DoctorProfileController {
       });
     }
   }
+
+  // Doctor updates their availability status
+  async updateAvailability(req, res) {
+    try {
+      const userId = req.user.id;
+      const profile =
+        await doctorProfileService.updateDoctorAvailability(userId);
+
+      res.status(200).json({
+        success: true,
+        message: `Doctor availability updated to ${profile.is_available ? "available" : "unavailable"}. `,
+        data: profile,
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message || "Failed to update doctor availability",
+      });
+    }
+  }
 }
 
 export default new DoctorProfileController();
