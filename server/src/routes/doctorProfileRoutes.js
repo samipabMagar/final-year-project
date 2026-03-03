@@ -12,6 +12,7 @@ const router = express.Router();
 
 // Get all doctors
 router.get("/", doctorProfileController.getAllDoctors);
+router.get("/:userId", doctorProfileController.getDoctorByUserId);
 
 // Doctor registration route (Public)
 router.post(

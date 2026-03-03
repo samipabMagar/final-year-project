@@ -107,6 +107,26 @@ class DoctorProfileController {
     }
   }
 
+  // Get doctor profile by user ID
+  async getDoctorByUserId(req, res){
+    try {
+      const {userId} = req.params;
+
+      const doctor = await doctorProfileService.getDoctorProfileByUserId(parseInt(userId));
+
+      res.status(200).json({
+        success: true,
+        message: "Doctor profile retrieved successfully",
+        data: doctor,
+      })
+    }catch (error){
+      res.status(404).json({
+        success: false,
+        message: error.message || "Failed to retrieve doctor profile",
+      })
+    }
+  }
+
   // Get logged-in doctor's profile
   async getMyProfile(req, res) {
     try {
