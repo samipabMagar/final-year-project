@@ -1,5 +1,6 @@
 import userModel from "./userModel.js";
 import doctorProfileModel from "./doctorProfileModel.js";
+import productModel from "./productModel.js";
 
 // Define relationships
 // One-to-One: User has one DoctorProfile (if user.role === "doctor")
