@@ -1,0 +1,67 @@
+import { Op } from "sequelize";
+import connection from "../configs/db.js";
+import productModel from "../models/productModel.js";
+import brandModel from "../models/brandModel.js";
+
+class ProductService {
+  async getAllProducts(filters = {}) {
+    const {
+      category,
+      skinType,
+      minPrice,
+      maxPrice,
+      search,
+      isActive,
+      brandId,
+    } = filters;
+    const whereClause = {};
+
+    if (category) {
+      whereClause.category = category;
+    }
+
+    if (brandId) {
+      whereClause.brand_id = brandId;
+    }
+
+    if (skinType) {
+      whereClause[Op.and] = connection.literal(
+        `JSON_CONTAINS(skin_type, "${skinType}")`,
+      );
+    }
+
+    if (minPrice || maxPrice) {
+      whereClause.price = {};
+      if (minPrice) whereClause.price[Op.gte] = minPrice;
+      if (maxPrice) whereClause.price[Op.lte] = maxPrice;
+    }
+
+    if(search){
+        whereClause[Op.or] = [
+            {name: {[Op.like]: `%${search}%`}},
+            {description: {[Op.like]: `%${search}%`}},
+            {ingredients: {[Op.like]: `%${search}%`}}
+        ];
+    }
+    if (isActive !== undefined) {
+      whereClause.is_active = isActive;
+    }
+
+    const products = await productModel.findAll({
+        where: whereClause,
+        include: [
+            {
+                model: brandModel,
+                as: "brand",
+                attributes: ["brand_id", "name", "logo_url"],
+            }
+        ],
+        order: [["created_at", "DESC"]],
+    })
+
+    return products;
+    
+  }
+}
+
+export default new ProductService();

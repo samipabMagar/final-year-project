@@ -56,9 +56,15 @@ const productModel = connection.define(
       allowNull: true,
     },
 
-    brand: {
-      type: DataTypes.STRING(100),
+    brand_id: {
+      type: DataTypes.INTEGER,
       allowNull: true,
+      references: {
+        model: "brands",
+        key: "brand_id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
     },
 
     skin_type: {
@@ -67,10 +73,30 @@ const productModel = connection.define(
       defaultValue: null,
       // Expected array: ["normal", "oily", "dry", "combination", "sensitive"]
     },
+
+    ingredients: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+
+    is_active: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+
+    rating: {
+      type: DataTypes.DECIMAL(2, 1),
+      allowNull: true,
+      defaultValue: 0,
+      validate: {
+        min: 0,
+        max: 5,
+      },
+    },
   },
   {
     tableName: "products",
-    timeStamps: true,
+    timestamps: true,
     createdAt: "created_at",
     updatedAt: "updated_at",
   },
