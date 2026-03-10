@@ -62,6 +62,11 @@ class ProductService {
     return products;
     
   }
+
+  async createProduct(productData){
+    const newProduct = await productModel.create(productData);
+    return newProduct;
+  }
 }
 
 export default new ProductService();
