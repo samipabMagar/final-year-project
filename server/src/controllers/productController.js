@@ -55,6 +55,27 @@ class ProductController {
       });
     }
   }
+
+  // Update product (Admin only)
+  async updateProduct(req, res) {
+    try {
+      const productId = req.params.id;
+      const updateData =req.body;
+
+      const updatedProduct = await productService.updateProduct(productId, updateData);
+
+      return res.status(200).json({
+        success: true,
+        message: "Product updated successfully",
+        data: updatedProduct,
+      })
+    }catch(error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message || "Failed to update product",
+      });
+    }
+  }
 }
 
 export default new ProductController();

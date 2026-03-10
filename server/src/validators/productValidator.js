@@ -62,3 +62,70 @@ export const createProductSchema = z.object({
 
   is_active: z.boolean().default(true),
 });
+
+export const updateProductSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, "Product name is required")
+    .max(255, "Product name must not exceed 255 characters")
+    .optional(),
+
+  description: z.string().trim().optional(),
+
+  price: z.coerce
+    .number({
+      invalid_type_error: "Price must be a number",
+    })
+    .min(0, "Price must be at least 0")
+    .optional(),
+
+  category: z
+    .enum(
+      [
+        "cleanser",
+        "moisturizer",
+        "serum",
+        "sunscreen",
+        "toner",
+        "mask",
+        "eye_care",
+        "lip_care",
+      ],
+      {
+        invalid_type_error: "Invalid category",
+      },
+    )
+    .optional(),
+
+  stock_quantity: z.coerce
+    .number()
+    .int("Stock quantity must be an integer")
+    .min(0, "Stock quantity must be at least 0")
+    .optional(),
+
+  images: z.array(z.string()).optional(),
+
+  brand_id: z.coerce
+  .number()
+  .int()
+  .positive("Brand ID must be a positive integer")
+  .optional()
+  .nullable(),
+
+  skin_type: z
+  .array(
+    z.enum(["normal", "oily", "dry", "combination", "sensitive"], {invalid_type_error: "Invalid skin type"})
+  )
+  .optional(),
+
+  ingredients: z.string().trim().optional(),
+
+  is_active: z.boolean().optional(),
+
+  rating: z.coerce
+  .number()
+  .min(0, "Rating must be at least 0")
+  .max(5, "Rating must be at most 5")
+  .optional(),
+});
