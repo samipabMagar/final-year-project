@@ -51,9 +51,11 @@ const productModel = connection.define(
       },
     },
 
-    image_url: {
-      type: DataTypes.STRING(255),
+    images: {
+      type: DataTypes.JSON,
       allowNull: true,
+      defaultValue: [],
+      // Expected array of image URLs: ["uploads/products/img1.jpg", "uploads/products/img2.jpg"]
     },
 
     brand_id: {

@@ -41,7 +41,7 @@ export const createProductSchema = z.object({
     .min(0, "Stock quantity must be at least 0")
     .default(0),
 
-  image_url: z.string().max(255).optional().nullable(),
+  images: z.array(z.string()).optional().default([]),
 
   brand_id: z.coerce
     .number()

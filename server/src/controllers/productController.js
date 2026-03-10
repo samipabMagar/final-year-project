@@ -35,6 +35,12 @@ class ProductController {
   async createProduct(req, res) {
     try {
       const productData = req.body;
+
+      // Handle uploaded images - normalize paths to use forward slashes
+      if (req.files && req.files.length > 0) {
+        productData.images = req.files.map((file) => file.path.replace(/\\/g, '/'));
+      }
+
       const newProduct = await productService.createProduct(productData);
 
       return res.status(201).json({
