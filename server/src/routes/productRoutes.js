@@ -21,5 +21,6 @@ router.post(
   productController.createProduct
 );
 router.put("/:id", authenticate, authorize("admin"), validate(updateProductSchema), productController.updateProduct)
+router.delete("/:id", authenticate, authorize("admin"), productController.deleteProduct)
 
 export default router;

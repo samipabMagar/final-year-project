@@ -76,6 +76,25 @@ class ProductController {
       });
     }
   }
+
+  // Delete product (Admin only)
+  async deleteProduct(req, res) {
+    try {
+      const productId = req.params.id;
+
+      const result = await productService.deleteProduct(productId);
+
+      return res.status(200).json({
+        success: true,
+        message: result.message,
+      })
+    } catch(error){
+      return res.status(500).json({
+        success: false,
+        message: error.message || "Failed to delete product",
+      })
+    }
+  }
 }
 
 export default new ProductController();

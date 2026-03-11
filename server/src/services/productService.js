@@ -78,6 +78,18 @@ class ProductService {
 
     return product;
   }
+
+  async deleteProduct(productId) {
+    const product = await productModel.findByPk(productId);
+
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
+    await product.destroy();
+
+    return { message: "Product deleted successfully" };
+  }
 }
 
 export default new ProductService();
