@@ -62,6 +62,24 @@ class ProductService {
     return products;
   }
 
+  async getProductById(productId){
+    const product = await productModel.findByPk(productId, {
+      include: [
+        {
+          model: brandModel,
+          as: "brand",
+          attributes: ["brand_id", "name", "description", "logo_url", "website_url"]
+        }
+      ]
+    })
+
+    if(!product){
+      throw new Error("Product not found");
+    }
+
+    return product;
+  }
+
   async createProduct(productData) {
     const newProduct = await productModel.create(productData);
     return newProduct;

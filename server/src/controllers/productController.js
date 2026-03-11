@@ -31,6 +31,26 @@ class ProductController {
     }
   }
 
+  // Get product by ID
+  async getProductById(req, res){
+    try {
+      const productId = req.params.id;
+
+      const product = await productService.getProductById(productId);
+
+     return res.status(200).json({
+      success: true,
+      message: "Product retrieved successfully",
+      data:product,
+     })
+    } catch(error){
+      return res.status(404).json({
+        success:false,
+        message: error.message || "Product not found",
+      })
+    }
+  }
+
   // Create new product (Admin only)
   async createProduct(req, res) {
     try {

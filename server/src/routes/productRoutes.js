@@ -10,6 +10,7 @@ const router = express.Router();
 
 // PUBLIC ROUTES - Anyone can view products
 router.get("/", productController.getAllProducts);
+router.get("/:id", productController.getProductById);
 
 // ADMIN ROUTES - Only admins can manage products
 router.post(
