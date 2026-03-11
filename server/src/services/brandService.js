@@ -1,0 +1,18 @@
+import brandModel from "../models/brandModel.js";
+
+class BrandService {
+  async createBrand(brandData) {
+    const existingBrand = await brandModel.findOne({
+      where: { name: brandData.name },
+    });
+
+    if (existingBrand) {
+      throw new Error("Brand with this name already exists");
+    }
+
+    const brand = await brandModel.create(brandData);
+    return brand;
+  }
+}
+
+export default new BrandService();

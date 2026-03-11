@@ -82,7 +82,9 @@ class ProductService {
 
   async createProduct(productData) {
     const newProduct = await productModel.create(productData);
-    return newProduct;
+
+    const productWithBrand = await this.getProductById(newProduct.product_id);
+    return productWithBrand;
   }
 
   async updateProduct(productId, updateData) {
@@ -94,7 +96,9 @@ class ProductService {
 
     await product.update(updateData);
 
-    return product;
+    const updatedProduct = await this.getProductById(productId);
+
+    return updatedProduct;
   }
 
   async deleteProduct(productId) {
