@@ -1,4 +1,3 @@
-import { json } from "sequelize";
 import userModel from "../models/userModel.js";
 import doctorProfileModel from "../models/doctorProfileModel.js";
 
