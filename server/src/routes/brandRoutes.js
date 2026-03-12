@@ -10,6 +10,8 @@ import {
 
 const router = express.Router();
 
+router.get("/", brandController.getAllBrands);
+
 router.post(
   "/",
   authenticate,
@@ -24,6 +26,6 @@ router.put(
   validate(updateBrandSchema),
   brandController.updateBrand,
 );
-router;
+router.delete("/:id", authenticate, authorize("admin"), brandController.deleteBrand);
 
 export default router;
