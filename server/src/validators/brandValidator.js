@@ -17,3 +17,21 @@ export const createBrandSchema = z.object({
 
     is_active: z.boolean().default(true),
 }).strict();
+
+
+// Validation schema for updating an existing brand
+export const updateBrandSchema = z.object({
+    name: z.string()
+    .trim()
+    .min(1, "Brand name cannot be empty")
+    .max(100, "Brand name must not exceed 100 characters")
+    .optional(),
+
+    description: z.string().trim().optional(),
+
+    logo_url: z.string().max(255).optional().nullable(),
+
+    website_url: z.string().url("Invalid website URL").optional().nullable(),
+
+    is_active: z.boolean().optional(),
+})

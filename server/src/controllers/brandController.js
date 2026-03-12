@@ -17,6 +17,23 @@ class BrandController {
       });
     }
   }
+
+  async updateBrand(req, res){
+    try {
+      const brand = await brandService.updateBrand(req.params.id, req.body);
+
+      return res.status(200).json({
+        success: true,
+        message: "Brand updated successfully",
+        data:  brand,
+      })
+    } catch(error){
+      return res.status(500).json({
+        success: false,
+        message: error.message || "Failed to update brand",
+      })
+    }
+  }
 }
 
 export default new BrandController();
