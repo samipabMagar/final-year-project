@@ -4,7 +4,7 @@ import { DataTypes } from "sequelize";
 const brandModel = connection.define("Brand", {
   brand_id: {
     type: DataTypes.INTEGER,
-    autIncrement: true,
+    autoIncrement: true,
     primaryKey: true,
   },
 
