@@ -157,6 +157,48 @@ class AppointmentService {
 
     return appointment;
   }
+
+  async getMyAppointments(currentUserId, currentUserRole, filters = {}) {
+    const whereClause = {};
+
+    if (filters.status) {
+      whereClause.status = filters.status;
+    }
+
+    if (currentUserRole === "user") {
+      whereClause.patient_user_id = currentUserId;
+
+      return await appointmentModel.findAll({
+        where: whereClause,
+        include: [
+          {
+            model: userModel,
+            as: "doctor",
+            attributes: ["user_id", "full_name", "email"],
+          },
+        ],
+        order: [["scheduled_at", "ASC"]],
+      });
+    }
+
+    if (currentUserRole === "doctor") {
+      whereClause.doctor_user_id = currentUserId;
+
+      return await appointmentModel.findAll({
+        where: whereClause,
+        include: [
+          {
+            model: userModel,
+            as: "patient",
+            attributes: ["user_id", "full_name", "email"],
+          },
+        ],
+        order: [["scheduled_at", "ASC"]],
+      });
+    }
+
+    throw new Error("Only users and doctors can view their appointments");
+  }
 }
 
 export default new AppointmentService();

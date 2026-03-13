@@ -18,6 +18,13 @@ router.post(
 	appointmentController.createAppointment,
 );
 
+router.get(
+  "/my",
+  authenticate,
+  authorize("user", "doctor"),
+  appointmentController.getMyAppointments,
+);
+
 router.patch(
   "/:appointmentId/confirm",
   authenticate,

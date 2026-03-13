@@ -48,6 +48,36 @@ class AppointmentController {
       });
     }
   }
+
+  async getMyAppointments(req, res) {
+    try {
+      const currentUserId = req.user.id;
+      const currentUserRole = req.user.role;
+      const filters = {
+        status: req.query.status,
+      };
+
+      const appointments = await appointmentService.getMyAppointments(
+        currentUserId,
+        currentUserRole,
+        filters,
+      );
+
+      return res.status(200).json({
+        success: true,
+        message:
+          appointments.length > 0
+            ? "Appointments retrieved successfully"
+            : "No appointments found",
+        data: appointments,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.message || "Failed to retrieve appointments",
+      });
+    }
+  }
 }
 
 export default new AppointmentController();
