@@ -15,3 +15,22 @@ export const createAppointmentSchema = z.object({
     })
     .datetime("scheduled_at must be a valid ISO datetime"),
 });
+
+export const confirmAppointmentSchema = z.object({
+  meeting_provider: z.enum(["google_meet", "zoom"], {
+    required_error: "meeting_provider is required",
+    invalid_type_error: "meeting_provider must be either google_meet or zoom",
+  }),
+  meeting_link: z
+    .string({
+      required_error: "meeting_link is required",
+      invalid_type_error: "meeting_link must be a valid URL string",
+    })
+    .url("meeting_link must be a valid URL"),
+  doctor_notes: z
+    .string({
+      invalid_type_error: "doctor_notes must be a string",
+    })
+    .trim()
+    .optional(),
+});

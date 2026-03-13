@@ -23,6 +23,31 @@ class AppointmentController {
       });
     }
   }
+
+  async confirmAppointment(req, res) {
+    try {
+      const doctorUserId = req.user.id;
+      const appointmentId = req.params.appointmentId;
+      const confirmationData = req.body;
+
+      const appointment = await appointmentService.confirmAppointment(
+        doctorUserId,
+        appointmentId,
+        confirmationData,
+      );
+
+      return res.status(200).json({
+        success: true,
+        message: "Appointment confirmed successfully",
+        data: appointment,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.message || "Failed to confirm appointment",
+      });
+    }
+  }
 }
 
 export default new AppointmentController();
