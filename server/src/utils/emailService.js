@@ -2,6 +2,7 @@ import transporter from "../configs/email.js";
 import {
   doctorApprovalEmailTemplate,
   doctorRejectionEmailTemplate,
+  appointmentConfirmedEmailTemplate
 } from "../helpers/emailHelper.js";
 
 // Helper function to send email
@@ -38,3 +39,25 @@ export const sendDoctorRejectionEmail = async (email, doctorName, reason) => {
 
   return await sendEmail(email, subject, html);
 };
+
+// Function to send appointment confirmation email
+export const sendAppointmentConfirmationEmail = async ({
+  patientEmail,
+  patientName,
+  doctorName,
+  appointmentDateTime,
+  meetingProvider,
+  meetingLink,
+}) => {
+  const subject = "Appointment Confirmed - eDermaCare";
+  const html = appointmentConfirmedEmailTemplate({
+    patientName,
+    doctorName,
+    appointmentDateTime,
+    meetingProvider,
+    meetingLink,
+  });
+
+  return await sendEmail(patientEmail, subject, html);
+};
+
