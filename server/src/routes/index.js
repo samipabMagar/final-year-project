@@ -3,6 +3,7 @@ import userRoutes from "./userRoutes.js";
 import doctorProfileRoutes from "./doctorProfileRoutes.js";
 import productRoutes from "./productRoutes.js";
 import brandRoutes from "./brandRoutes.js";
+import appointmentRoutes from "./appointmentRoute.js";
 
 const router = express.Router();
 
@@ -11,5 +12,6 @@ router.use("/users", userRoutes);
 router.use("/doctors", doctorProfileRoutes);
 router.use("/products", productRoutes);
 router.use("/brands", brandRoutes);
+router.use("/appointments", appointmentRoutes);
 
 export default router;
