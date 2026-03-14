@@ -34,3 +34,32 @@ export const confirmAppointmentSchema = z.object({
     .trim()
     .optional(),
 });
+
+export const completeAppointmentSchema = z.object({
+  doctor_notes: z
+    .string({
+      invalid_type_error: "doctor_notes must be a string",
+    })
+    .trim()
+    .optional(),
+});
+
+export const cancelAppointmentSchema = z.object({
+  cancellation_reason: z
+    .string({
+      invalid_type_error: "cancellation_reason must be a string",
+    })
+    .trim()
+    .max(1000, "cancellation_reason must not exceed 1000 characters")
+    .optional(),
+});
+
+export const rejectAppointmentSchema = z.object({
+  rejection_reason: z
+    .string({
+      invalid_type_error: "rejection_reason must be a string",
+    })
+    .trim()
+    .max(1000, "rejection_reason must not exceed 1000 characters")
+    .optional(),
+});

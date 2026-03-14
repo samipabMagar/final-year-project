@@ -4,20 +4,22 @@ import { authenticate } from "../middlewares/authMiddleware.js";
 import { authorize } from "../middlewares/authorizeMiddleware.js";
 import { validate } from "../middlewares/validateMiddleware.js";
 import {
-	createAppointmentSchema,
-	confirmAppointmentSchema,
+  createAppointmentSchema,
+  confirmAppointmentSchema,
 } from "../validators/appointmentValidator.js";
 
 const router = express.Router();
 
+// User can book an appointment
 router.post(
-	"/",
-	authenticate,
-	authorize("user"),
-	validate(createAppointmentSchema),
-	appointmentController.createAppointment,
+  "/",
+  authenticate,
+  authorize("user"),
+  validate(createAppointmentSchema),
+  appointmentController.createAppointment,
 );
 
+// User can view their appointments
 router.get(
   "/my",
   authenticate,
@@ -25,6 +27,7 @@ router.get(
   appointmentController.getMyAppointments,
 );
 
+// Doctor can confirm an appointment
 router.patch(
   "/:appointmentId/confirm",
   authenticate,
@@ -32,5 +35,8 @@ router.patch(
   validate(confirmAppointmentSchema),
   appointmentController.confirmAppointment,
 );
+router.patch("/:appointmentId/complete", authenticate, authorize("doctor"), appointmentController.completeAppointment);
+
+
 
 export default router;

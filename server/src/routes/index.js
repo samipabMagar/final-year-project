@@ -3,7 +3,7 @@ import userRoutes from "./userRoutes.js";
 import doctorProfileRoutes from "./doctorProfileRoutes.js";
 import productRoutes from "./productRoutes.js";
 import brandRoutes from "./brandRoutes.js";
-import appointmentRoutes from "./appointmentRoute.js";
+import appointmentRoutes from "./appointmentRoutes.js";
 
 const router = express.Router();
 

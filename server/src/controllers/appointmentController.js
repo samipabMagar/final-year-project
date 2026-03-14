@@ -78,6 +78,30 @@ class AppointmentController {
       });
     }
   }
+
+  async completeAppointment(req, res){
+    try {
+      const doctorUserId = req.user.id;
+      const appointmentId = req.params.appointmentId;
+      const completionData =- req.body;
+
+      const appointment = await appointmentService.completeAppointment(
+        doctorUserId,appointmentId,completionData
+      );
+
+      return res.status(200).json({
+        success: true,
+        message: "Appointment marked as completed successfully",
+        data: appointment,
+      })
+    }catch(error){
+      return res.status(400).json({
+        success: false,
+        message: error.message || "Failed to complete appointment",
+      });
+    }
+  }
+
 }
 
 export default new AppointmentController();
