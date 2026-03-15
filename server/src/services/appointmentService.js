@@ -3,6 +3,7 @@ import appointmentModel from "../models/appointmentModel.js";
 import userModel from "../models/userModel.js";
 import doctorProfileModel from "../models/doctorProfileModel.js";
 import { sendAppointmentConfirmationEmail } from "../utils/emailService.js";
+import {format} from "date-fns";
 
 class AppointmentService {
   async createAppointment(patientUserId, appointmentData) {
@@ -127,16 +128,7 @@ class AppointmentService {
       doctor_notes: doctor_notes || null,
     });
 
-    const appointmentDateTime = new Date(
-      appointment.scheduled_at,
-    ).toLocaleString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
+    const appointmentDateTime = format(new Date(appointment.scheduled_at), "MMMM d, yyyy 'at' h:mm a");
 
     const meetingProviderLabel =
       meeting_provider === "google_meet" ? "Google Meet" : "Zoom";
