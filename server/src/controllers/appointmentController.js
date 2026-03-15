@@ -160,7 +160,7 @@ class AppointmentController {
   async getAllAppointmentsForAdmin(req, res) {
     try {
       const appointments = await appointmentService.getAllAppointmentsForAdmin(
-        req.query
+        req.query,
       );
 
       return res.status(200).json({
@@ -175,6 +175,31 @@ class AppointmentController {
       return res.status(400).json({
         success: false,
         message: error.message || "Failed to retrieve appointments",
+      });
+    }
+  }
+
+  async getAppointmentById(req, res) {
+    try {
+      const appointmentId = req.params.appointmentId;
+      const currentUserId = req.user.id;
+      const currentUserRole = req.user.role;
+
+      const appointment = await appointmentService.getAppointmentById(
+        currentUserId,
+        currentUserRole,
+        appointmentId,
+      );
+
+      return res.status(200).json({
+        success: true,
+        message: "Appointment retrieved successfully",
+        data: appointment,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.message || "Failed to retrieve appointment",
       });
     }
   }

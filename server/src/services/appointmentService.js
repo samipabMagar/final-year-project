@@ -443,6 +443,41 @@ class AppointmentService {
       }
     }
   }
+
+  async getAppointmentById(currentUserId, currentUserRole, appointmentId) {
+    const appointment = await appointmentModel.findByPk(appointmentId, {
+      include: [
+        {
+          model: userModel,
+          as: "patient",
+          attributes: ["user_id", "full_name", "email"],
+        },
+        {
+          model: userModel,
+          as: "doctor",
+          attributes: ["user_id", "full_name", "email"],
+        }
+      ]
+    })
+
+    if(!appointment) {
+      throw new Error("Appointment not found");
+    }
+
+    if(currentUserRole === "admin") {
+      return appointment;
+    }
+
+    if(currentUserRole === "user" && Number(appointment.patient_user_id) === Number(currentUserId)) {
+      return appointment;
+    }
+
+    if(currentUserRole === "doctor" && Number(appointment.doctor_user_id) === Number(currentUserId)){
+      return appointment;
+    }
+
+    throw new Error("You are not authorized to view this appointment");
+  }
 }
 
 export default new AppointmentService();

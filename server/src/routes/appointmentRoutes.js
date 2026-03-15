@@ -54,8 +54,19 @@ router.patch(
   validate(cancelAppointmentSchema),
   appointmentController.cancelAppointment,
 );
+router.get(
+  "/:appointmentId",
+  authenticate,
+  authorize("user", "doctor", "admin"),
+  appointmentController.getAppointmentById,
+);
 
 // Admin can view all appointments
-router.get("/", authenticate, authorize("admin"), appointmentController.getAllAppointmentsForAdmin);
+router.get(
+  "/",
+  authenticate,
+  authorize("admin"),
+  appointmentController.getAllAppointmentsForAdmin,
+);
 
 export default router;
