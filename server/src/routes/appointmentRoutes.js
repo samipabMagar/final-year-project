@@ -6,6 +6,7 @@ import { validate } from "../middlewares/validateMiddleware.js";
 import {
   createAppointmentSchema,
   confirmAppointmentSchema,
+  cancelAppointmentSchema,
 } from "../validators/appointmentValidator.js";
 
 const router = express.Router();
@@ -35,8 +36,18 @@ router.patch(
   validate(confirmAppointmentSchema),
   appointmentController.confirmAppointment,
 );
-router.patch("/:appointmentId/complete", authenticate, authorize("doctor"), appointmentController.completeAppointment);
-
-
+router.patch(
+  "/:appointmentId/complete",
+  authenticate,
+  authorize("doctor"),
+  appointmentController.completeAppointment,
+);
+router.patch(
+  "/:appointmentId/cancel",
+  authenticate,
+  authorize("user", "doctor", "admin"),
+  validate(cancelAppointmentSchema),
+  appointmentController.cancelAppointment,
+);
 
 export default router;

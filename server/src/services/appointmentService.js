@@ -127,17 +127,16 @@ class AppointmentService {
       doctor_notes: doctor_notes || null,
     });
 
-    const appointmentDateTime = new Date(appointment.scheduled_at).toLocaleString(
-      "en-US",
-      {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-      },
-    );
+    const appointmentDateTime = new Date(
+      appointment.scheduled_at,
+    ).toLocaleString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
 
     const meetingProviderLabel =
       meeting_provider === "google_meet" ? "Google Meet" : "Zoom";
@@ -198,44 +197,6 @@ class AppointmentService {
     }
 
     throw new Error("Only users and doctors can view their appointments");
-  }
-
-  async completeAppointment(doctorUserId, appointmentId, completionData = {}){
-    const {doctor_notes} = completionData;
-
-    const appointment = await appointmentModel.findByPk(appointmentId, {
-      include: [
-        {
-          model: userModel,
-          as: "patient",
-          attributes: ["user_id", "full_name", "email"],
-        },
-        {
-          model: userModel,
-          as: "doctor",
-          attributes: ["user_id", "full_name", "email"],
-        }
-      ]
-    });
-
-    if (!appointment){
-      throw new Error("Appointment not found");
-    }
-
-    if(Number(appointment.doctor_user_id) !== Number(doctorUserId)){
-      throw new Error("You are not authorized to complete this appointment");
-    }
-
-    if(appointment.status !== "confirmed"){
-      throw new Error(`Only confirmed appointments can be completed. Current status: ${appointment.status}`);
-    }
-
-    await appointment.update({
-      status: "completed",
-      doctor_notes: doctor_notes !== undefined ? doctor_notes: appointment.doctor_notes,
-    })
-
-    return appointment;
   }
 
   async completeAppointment(doctorUserId, appointmentId, completionData = {}) {
@@ -307,6 +268,7 @@ class AppointmentService {
     }
 
     let cancelledBy;
+
     if (currentUserRole === "admin") {
       cancelledBy = "admin";
     } else if (
@@ -343,181 +305,6 @@ class AppointmentService {
     });
 
     return appointment;
-  }
-
-  async rejectAppointment(doctorUserId, appointmentId, rejectionData = {}) {
-    const { rejection_reason } = rejectionData;
-
-    const appointment = await appointmentModel.findByPk(appointmentId, {
-      include: [
-        {
-          model: userModel,
-          as: "patient",
-          attributes: ["user_id", "full_name", "email"],
-        },
-        {
-          model: userModel,
-          as: "doctor",
-          attributes: ["user_id", "full_name", "email"],
-        },
-      ],
-    });
-
-    if (!appointment) {
-      throw new Error("Appointment not found");
-    }
-
-    if (Number(appointment.doctor_user_id) !== Number(doctorUserId)) {
-      throw new Error("You are not authorized to reject this appointment");
-    }
-
-    if (appointment.status !== "pending") {
-      throw new Error(
-        `Only pending appointments can be rejected. Current status: ${appointment.status}`,
-      );
-    }
-
-    await appointment.update({
-      status: "rejected",
-      doctor_notes:
-        rejection_reason !== undefined
-          ? rejection_reason
-          : appointment.doctor_notes,
-      meeting_provider: null,
-      meeting_link: null,
-    });
-
-    return appointment;
-  }
-
-  async getAppointmentById(currentUserId, currentUserRole, appointmentId) {
-    const appointment = await appointmentModel.findByPk(appointmentId, {
-      include: [
-        {
-          model: userModel,
-          as: "patient",
-          attributes: ["user_id", "full_name", "email"],
-        },
-        {
-          model: userModel,
-          as: "doctor",
-          attributes: ["user_id", "full_name", "email"],
-        },
-      ],
-    });
-
-    if (!appointment) {
-      throw new Error("Appointment not found");
-    }
-
-    if (currentUserRole === "admin") {
-      return appointment;
-    }
-
-    if (
-      currentUserRole === "user" &&
-      Number(appointment.patient_user_id) === Number(currentUserId)
-    ) {
-      return appointment;
-    }
-
-    if (
-      currentUserRole === "doctor" &&
-      Number(appointment.doctor_user_id) === Number(currentUserId)
-    ) {
-      return appointment;
-    }
-
-    throw new Error("You are not authorized to view this appointment");
-  }
-
-  async getAllAppointmentsForAdmin(query = {}) {
-    const {
-      status,
-      doctor_user_id,
-      patient_user_id,
-      from,
-      to,
-      search,
-      sortBy = "scheduled_at",
-      sortOrder = "DESC",
-      page = 1,
-      limit = 10,
-    } = query;
-
-    const safePage = Math.max(Number(page) || 1, 1);
-    const safeLimit = Math.min(Math.max(Number(limit) || 10, 1), 100);
-    const offset = (safePage - 1) * safeLimit;
-
-    const whereClause = {};
-
-    if (status) {
-      whereClause.status = status;
-    }
-
-    if (doctor_user_id) {
-      whereClause.doctor_user_id = Number(doctor_user_id);
-    }
-
-    if (patient_user_id) {
-      whereClause.patient_user_id = Number(patient_user_id);
-    }
-
-    if (from || to) {
-      whereClause.scheduled_at = {};
-      if (from) {
-        whereClause.scheduled_at[Op.gte] = new Date(from);
-      }
-      if (to) {
-        whereClause.scheduled_at[Op.lte] = new Date(to);
-      }
-    }
-
-    if (search) {
-      whereClause[Op.or] = [
-        { "$patient.full_name$": { [Op.like]: `%${search}%` } },
-        { "$patient.email$": { [Op.like]: `%${search}%` } },
-        { "$doctor.full_name$": { [Op.like]: `%${search}%` } },
-        { "$doctor.email$": { [Op.like]: `%${search}%` } },
-      ];
-    }
-
-    const allowedSortFields = ["scheduled_at", "created_at", "updated_at", "status"];
-    const finalSortBy = allowedSortFields.includes(sortBy) ? sortBy : "scheduled_at";
-    const finalSortOrder = String(sortOrder).toUpperCase() === "ASC" ? "ASC" : "DESC";
-
-    const result = await appointmentModel.findAndCountAll({
-      where: whereClause,
-      include: [
-        {
-          model: userModel,
-          as: "patient",
-          attributes: ["user_id", "full_name", "email"],
-        },
-        {
-          model: userModel,
-          as: "doctor",
-          attributes: ["user_id", "full_name", "email"],
-        },
-      ],
-      order: [[finalSortBy, finalSortOrder]],
-      limit: safeLimit,
-      offset,
-      distinct: true,
-    });
-
-    const total = result.count;
-    const totalPages = Math.ceil(total / safeLimit) || 1;
-
-    return {
-      appointments: result.rows,
-      meta: {
-        page: safePage,
-        limit: safeLimit,
-        total,
-        totalPages,
-      },
-    };
   }
 }
 
