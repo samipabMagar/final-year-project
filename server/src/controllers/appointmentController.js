@@ -112,8 +112,8 @@ class AppointmentController {
       const cancellationData = req.body;
 
       const appointment = await appointmentService.cancelAppointment(
-        userId,
-        userRole,
+        currentUserId,
+        currentUserRole,
         appointmentId,
         cancellationData,
       );
@@ -128,6 +128,31 @@ class AppointmentController {
         success: false,
         message: error.message || "Failed to cancel appointment",
       });
+    }
+  }
+
+  async rejectAppointment(req, res){
+    try {
+      const doctorUserId = req.user.id;
+      const appointmentId = req.params.appointmentId;
+      const rejectionData = req.body;
+
+      const appointment = await appointmentService.rejectAppointment(
+        doctorUserId,
+        appointmentId,
+        rejectionData,
+      )
+
+      return res.status(200).json({
+        success: true,
+        message: "Appointment rejected successfully",
+        data: appointment,
+      })
+    }catch(error) {
+      return res.status(400).json({
+        success: false,
+        message: error.message || "Failed to reject appointment",
+      })
     }
   }
 }

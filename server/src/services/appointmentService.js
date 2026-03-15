@@ -3,7 +3,7 @@ import appointmentModel from "../models/appointmentModel.js";
 import userModel from "../models/userModel.js";
 import doctorProfileModel from "../models/doctorProfileModel.js";
 import { sendAppointmentConfirmationEmail } from "../utils/emailService.js";
-import {format} from "date-fns";
+import { format } from "date-fns";
 
 class AppointmentService {
   async createAppointment(patientUserId, appointmentData) {
@@ -128,7 +128,10 @@ class AppointmentService {
       doctor_notes: doctor_notes || null,
     });
 
-    const appointmentDateTime = format(new Date(appointment.scheduled_at), "MMMM d, yyyy 'at' h:mm a");
+    const appointmentDateTime = format(
+      new Date(appointment.scheduled_at),
+      "MMMM d, yyyy 'at' h:mm a",
+    );
 
     const meetingProviderLabel =
       meeting_provider === "google_meet" ? "Google Meet" : "Zoom";
@@ -294,6 +297,48 @@ class AppointmentService {
       cancelled_by: cancelledBy,
       cancellation_reason: cancellation_reason || null,
       cancelled_at: new Date(),
+    });
+
+    return appointment;
+  }
+
+  async rejectAppointment(doctorUserId, appointmentId, rejectionData={}) {
+    const { rejection_reason } = rejectionData;
+
+    const appointment = await appointmentModel.findByPk(appointmentId, {
+      include: [
+        {
+          model: userModel,
+          as: "patient",
+          attributes: ["user_id", "full_name", "email"],
+        },
+        {
+          model: userModel,
+          as: "doctor",
+          attributes: ["user_id", "full_name", "email"],
+        }
+      ],
+    });
+
+    if (!appointment) {
+      throw new Error("Appointment not found");
+    }
+
+    if (Number(appointment.doctor_user_id) !== Number(doctorUserId)) {
+      throw new Error("You are not authorized to reject this appointment");
+    }
+
+    if (appointment.status !== "pending") {
+      throw new Error(
+        `Only pending appointments can be rejected. Current status: ${appointment.status}`,
+      );
+    }
+
+    await appointment.update({
+      status: "rejected",
+      doctor_notes: rejection_reason !== undefined ? rejection_reason : appointment.doctor_notes,
+      meeting_provider: null,
+      meeting_link: null,
     });
 
     return appointment;

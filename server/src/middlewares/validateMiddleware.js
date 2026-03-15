@@ -2,7 +2,8 @@
 export const validate = (schema) => {
   return async (req, res, next) => {
     try {
-      const validatedData = await schema.parseAsync(req.body);
+      const payload = req.body ?? {};
+      const validatedData = await schema.parseAsync(payload);
       // Replace req.body with validated  data
       req.body = validatedData;
       next();

@@ -43,6 +43,12 @@ router.patch(
   appointmentController.completeAppointment,
 );
 router.patch(
+  "/:appointmentId/reject",
+  authenticate,
+  authorize("doctor"),
+  appointmentController.rejectAppointment,
+);
+router.patch(
   "/:appointmentId/cancel",
   authenticate,
   authorize("user", "doctor", "admin"),
