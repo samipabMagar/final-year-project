@@ -83,7 +83,7 @@ class AppointmentController {
     try {
       const doctorUserId = req.user.id;
       const appointmentId = req.params.appointmentId;
-      const completionData = -req.body;
+      const completionData = req.body;
 
       const appointment = await appointmentService.completeAppointment(
         doctorUserId,

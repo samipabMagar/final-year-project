@@ -6,6 +6,8 @@ import { validate } from "../middlewares/validateMiddleware.js";
 import {
   createAppointmentSchema,
   confirmAppointmentSchema,
+  completeAppointmentSchema,
+  rejectAppointmentSchema,
   cancelAppointmentSchema,
 } from "../validators/appointmentValidator.js";
 
@@ -39,12 +41,14 @@ router.patch(
   "/:appointmentId/complete",
   authenticate,
   authorize("doctor"),
+  validate(completeAppointmentSchema),
   appointmentController.completeAppointment,
 );
 router.patch(
   "/:appointmentId/reject",
   authenticate,
   authorize("doctor"),
+  validate(rejectAppointmentSchema),
   appointmentController.rejectAppointment,
 );
 router.patch(
