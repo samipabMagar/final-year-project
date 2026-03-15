@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 import appointmentModel from "../models/appointmentModel.js";
 import userModel from "../models/userModel.js";
 import doctorProfileModel from "../models/doctorProfileModel.js";
@@ -302,7 +302,7 @@ class AppointmentService {
     return appointment;
   }
 
-  async rejectAppointment(doctorUserId, appointmentId, rejectionData={}) {
+  async rejectAppointment(doctorUserId, appointmentId, rejectionData = {}) {
     const { rejection_reason } = rejectionData;
 
     const appointment = await appointmentModel.findByPk(appointmentId, {
@@ -316,7 +316,7 @@ class AppointmentService {
           model: userModel,
           as: "doctor",
           attributes: ["user_id", "full_name", "email"],
-        }
+        },
       ],
     });
 
@@ -336,12 +336,112 @@ class AppointmentService {
 
     await appointment.update({
       status: "rejected",
-      doctor_notes: rejection_reason !== undefined ? rejection_reason : appointment.doctor_notes,
+      doctor_notes:
+        rejection_reason !== undefined
+          ? rejection_reason
+          : appointment.doctor_notes,
       meeting_provider: null,
       meeting_link: null,
     });
 
     return appointment;
+  }
+
+  async getAllAppointmentsForAdmin(query = {}) {
+    const {
+      status,
+      doctor_user_id,
+      patient_user_id,
+      from,
+      to,
+      search,
+      sortBy = "scheduled_at",
+      sortOrder = "DESC",
+      page = 1,
+      limit = 10,
+    } = query;
+
+    const safePage = Math.max(Number(page) || 1, 1);
+    const safeLimit = Math.min(Math.max(Number(limit) || 10, 1), 100);
+    const offset = (safePage - 1) * safeLimit;
+
+    const whereClause = {};
+
+    if (status) {
+      whereClause.status = status;
+    }
+
+    if (doctor_user_id) {
+      whereClause.doctor_user_id = Number(doctor_user_id);
+    }
+
+    if (patient_user_id) {
+      whereClause.patient_user_id = Number(patient_user_id);
+    }
+
+    if (from || to) {
+      whereClause.scheduled_at = {};
+
+      if (from) {
+        whereClause.scheduled_at[Op.gte] = new Date(from);
+      }
+      if (to) {
+        whereClause.scheduled_at[Op.lte] = new Date(to);
+      }
+    }
+
+    if (search) {
+      whereClause[Op.or] = [
+        { "$patient.full_name$": { [Op.like]: `%${search}%` } },
+        { "$patient.email$": { [Op.like]: `%${search}%` } },
+        { "$doctor.full_name$": { [Op.like]: `%${search}%` } },
+        { "$doctor.email$": { [Op.like]: `%${search}%` } },
+      ];
+    }
+
+    const allowedSortFields = [
+      "scheduled_at",
+      "created_at",
+      "updated_at",
+      "status",
+    ];
+    const safeSortBy = allowedSortFields.includes(sortBy)
+      ? sortBy
+      : "scheduled_at";
+    const safeSortOrder = sortOrder.toUpperCase() === "ASC" ? "ASC" : "DESC";
+
+    const result = await appointmentModel.findAndCountAll({
+      where: whereClause,
+      include: [
+        {
+          model: userModel,
+          as: "patient",
+          attributes: ["user_id", "full_name", "email"],
+        },
+        {
+          model: userModel,
+          as: "doctor",
+          attributes: ["user_id", "full_name", "email"],
+        },
+      ],
+      order: [[safeSortBy, safeSortOrder]],
+      limit: safeLimit,
+      offset,
+      distinct: true,
+    });
+
+    const total = result.count;
+    const totalPages = Math.ceil(total/safeLimit) || 1;
+
+    return {
+      appointments: result.rows,
+      meta: {
+        page: safePage,
+        limit: safeLimit,
+        total,
+        totalPages,
+      }
+    }
   }
 }
 

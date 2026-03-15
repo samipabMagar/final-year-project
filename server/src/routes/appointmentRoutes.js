@@ -28,7 +28,6 @@ router.get(
   appointmentController.getMyAppointments,
 );
 
-// Doctor can confirm an appointment
 router.patch(
   "/:appointmentId/confirm",
   authenticate,
@@ -55,5 +54,8 @@ router.patch(
   validate(cancelAppointmentSchema),
   appointmentController.cancelAppointment,
 );
+
+// Admin can view all appointments
+router.get("/", authenticate, authorize("admin"), appointmentController.getAllAppointmentsForAdmin);
 
 export default router;

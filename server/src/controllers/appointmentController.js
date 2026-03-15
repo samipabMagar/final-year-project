@@ -131,7 +131,7 @@ class AppointmentController {
     }
   }
 
-  async rejectAppointment(req, res){
+  async rejectAppointment(req, res) {
     try {
       const doctorUserId = req.user.id;
       const appointmentId = req.params.appointmentId;
@@ -141,18 +141,41 @@ class AppointmentController {
         doctorUserId,
         appointmentId,
         rejectionData,
-      )
+      );
 
       return res.status(200).json({
         success: true,
         message: "Appointment rejected successfully",
         data: appointment,
-      })
-    }catch(error) {
+      });
+    } catch (error) {
       return res.status(400).json({
         success: false,
         message: error.message || "Failed to reject appointment",
-      })
+      });
+    }
+  }
+
+  //
+  async getAllAppointmentsForAdmin(req, res) {
+    try {
+      const appointments = await appointmentService.getAllAppointmentsForAdmin(
+        req.query
+      );
+
+      return res.status(200).json({
+        success: true,
+        message:
+          appointments.appointments.length > 0
+            ? "Appointments retrieved successfully"
+            : "No appointments found",
+        data: appointments,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.message || "Failed to retrieve appointments",
+      });
     }
   }
 }
