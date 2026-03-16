@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Sign In — eDermaCare",
+  title: "eDermaCare",
   description:
     "Sign in to your eDermaCare account to shop skincare products and consult dermatologists.",
 };
