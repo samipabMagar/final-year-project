@@ -5,11 +5,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
 import { Mail } from "lucide-react";
 import AuthLayout from "@/components/auth/AuthLayout";
 import Input from "@/components/ui/Input";
 import PasswordInput from "@/components/ui/PasswordInput";
 import Button from "@/components/ui/Button";
+import { loginUser } from "@/store/thunks/authThunks";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -17,11 +20,14 @@ const loginSchema = z.object({
 });
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { isLoading, error } = useSelector((state) => state.auth);
   const [authError, setAuthError] = useState("");
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(loginSchema),
   });
@@ -29,8 +35,8 @@ const LoginPage = () => {
   const onSubmit = async (data) => {
     try {
       setAuthError("");
-      // TODO: Add login API call here
-      console.log("Login data:", data);
+      await dispatch(loginUser(data)).unwrap();
+      router.push("/");
     } catch (error) {
       setAuthError(error.message || "An error occurred during login");
     }
@@ -43,9 +49,9 @@ const LoginPage = () => {
       sidebarTitle="Welcome Back!"
       sidebarSubtitle="Sign in to access your personalized skincare dashboard"
     >
-      {authError && (
+      {(authError || error) && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-          {authError}
+          {authError || error}
         </div>
       )}
 
@@ -80,8 +86,8 @@ const LoginPage = () => {
           </a>
         </div>
 
-        <Button type="submit" loading={isSubmitting} className="w-full text-lg">
-          {isSubmitting ? "Signing in..." : "Sign In"}
+        <Button type="submit" loading={isLoading} className="w-full text-lg">
+          {isLoading ? "Signing in..." : "Sign In"}
         </Button>
       </form>
 

@@ -1,4 +1,5 @@
 import "./globals.css";
+import StoreProvider from "@/store/StoreProvider";
 
 export const metadata = {
   title: "eDermaCare - Your Skincare & Dermatology Platform",
@@ -10,7 +11,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <main>{children}</main>
+        <StoreProvider>
+          <main>{children}</main>
+        </StoreProvider>
       </body>
     </html>
   );
