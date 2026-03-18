@@ -32,7 +32,7 @@ const AuthLayout = ({
   return (
     <div className="min-h-screen bg-linear-to-r from-[#E6F7F7] to-[#F9FAFB] flex items-center justify-center">
       <div className="bg-white w-full max-w-6xl flex rounded-3xl min-h-80  overflow-hidden shadow-2xl">
-        <div className="bg-[#2FA4A9] text-white  p-12  flex-col justify-between hidden  lg:flex">
+        <div className="bg-[#2FA4A9] w-2/5 text-white  p-12  flex-col justify-between hidden  lg:flex">
           <div>
             <h1 className="text-4xl font-bold mb-4">{sidebarTitle}</h1>
             <p className="text-lg opacity-90 mb-8">{sidebarSubtitle}</p>

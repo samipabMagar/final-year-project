@@ -1,13 +1,12 @@
 import Select from "@/components/ui/Select";
 
-const RegisterPatientFields = ({ formData, onChange }) => {
+const RegisterPatientFields = ({ register, errors }) => {
   return (
     <Select
       id="skin_type"
-      name="skin_type"
       label="Skin Type"
-      value={formData.skin_type}
-      onChange={onChange}
+      {...register("skin_type")}
+      error={errors.skin_type?.message}
     >
       <option value="">Select Skin Type</option>
       <option value="oily">Oily</option>

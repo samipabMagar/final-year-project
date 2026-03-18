@@ -3,31 +3,29 @@ import Input from "@/components/ui/Input";
 import PasswordInput from "@/components/ui/PasswordInput";
 import Select from "@/components/ui/Select";
 
-const RegisterCommonFields = ({ formData, onChange }) => {
+const RegisterCommonFields = ({ register, errors }) => {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
           id="full_name"
-          name="full_name"
           type="text"
           label="Full Name"
           icon={UserRound}
           required
-          value={formData.full_name}
-          onChange={onChange}
+          {...register("full_name")}
+          error={errors.full_name?.message}
           placeholder="John Doe"
         />
 
         <Input
           id="email"
-          name="email"
           type="email"
           label="Email Address"
           icon={Mail}
           required
-          value={formData.email}
-          onChange={onChange}
+          {...register("email")}
+          error={errors.email?.message}
           placeholder="you@example.com"
         />
       </div>
@@ -35,21 +33,19 @@ const RegisterCommonFields = ({ formData, onChange }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <PasswordInput
           id="password"
-          name="password"
           label="Password"
           required
-          value={formData.password}
-          onChange={onChange}
+          {...register("password")}
+          error={errors.password?.message}
           placeholder="Min. 8 characters"
         />
 
         <PasswordInput
           id="confirmPassword"
-          name="confirmPassword"
           label="Confirm Password"
           required
-          value={formData.confirmPassword}
-          onChange={onChange}
+          {...register("confirmPassword")}
+          error={errors.confirmPassword?.message}
           placeholder="Re-enter password"
         />
       </div>
@@ -57,22 +53,22 @@ const RegisterCommonFields = ({ formData, onChange }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
           id="phone"
-          name="phone"
           type="tel"
           label="Phone Number"
           icon={Phone}
-          value={formData.phone}
-          onChange={onChange}
+          required
+          {...register("phone")}
+          error={errors.phone?.message}
           placeholder="(123) 456-7890"
         />
 
         <Select
           id="gender"
-          name="gender"
           label="Gender"
           icon={User}
-          value={formData.gender}
-          onChange={onChange}
+          required
+          {...register("gender")}
+          error={errors.gender?.message}
         >
           <option value="">Select Gender</option>
           <option value="male">Male</option>

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
@@ -12,89 +14,72 @@ import RegisterMobileLoginLink from "@/components/auth/register/RegisterMobileLo
 import RegisterPatientFields from "@/components/auth/register/RegisterPatientFields";
 import RegisterUserTypeToggle from "@/components/auth/register/RegisterUserTypeToggle";
 import { authService } from "@/services/authService";
-
-const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
+import { registerSchema } from "@/validators/authSchemas";
 
 const RegisterPage = () => {
   const router = useRouter();
-  const [userType, setUserType] = useState("patient");
-  const [formData, setFormData] = useState({
-    full_name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    phone: "",
-    gender: "",
-    skin_type: "",
-    specialization: "",
-    license_number: "",
-    years_of_experience: "",
-    consultation_fee: "",
-  });
-  const [error, setError] = useState("");
+  const [serverError, setServerError] = useState("");
   const [success, setSuccess] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      userType: "patient",
+      full_name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      phone: "",
+      gender: "",
+      skin_type: "",
+      specialization: "",
+      license_number: "",
+      years_of_experience: "",
+      consultation_fee: "",
+    },
+  });
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    setError("");
+  const userType = watch("userType");
+
+  const handleUserTypeChange = (type) => {
+    setValue("userType", type, { shouldValidate: true });
+    setServerError("");
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    setError("");
+  const onSubmit = async (data) => {
+    setServerError("");
     setSuccess("");
 
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      setLoading(false);
-      return;
-    }
-
-    if (formData.password.length < 8) {
-      setError("Password must be at least 8 characters");
-      setLoading(false);
-      return;
-    }
-
-    if (!strongPasswordRegex.test(formData.password)) {
-      setError(
-        "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-      );
-      setLoading(false);
-      return;
-    }
-
     try {
-      if (userType === "patient") {
+      if (data.userType === "patient") {
         const patientData = {
-          full_name: formData.full_name,
-          email: formData.email,
-          password: formData.password,
-          phone: formData.phone,
-          gender: formData.gender,
-          skin_type: formData.skin_type || null,
+          full_name: data.full_name,
+          email: data.email,
+          password: data.password,
+          phone: data.phone,
+          gender: data.gender,
+          skin_type: data.skin_type || null,
         };
 
         await authService.registerPatient(patientData);
         setSuccess("Patient registered successfully! Redirecting to login...");
       } else {
         const doctorData = {
-          full_name: formData.full_name,
-          email: formData.email,
-          password: formData.password,
-          phone: formData.phone,
-          gender: formData.gender,
-          specialization: formData.specialization,
-          license_number: formData.license_number,
-          years_of_experience: Number(formData.years_of_experience || 0),
-          consultation_fee: Number(formData.consultation_fee || 0),
+          full_name: data.full_name,
+          email: data.email,
+          password: data.password,
+          phone: data.phone,
+          gender: data.gender,
+          specialization: data.specialization,
+          license_number: data.license_number,
+          years_of_experience: data.years_of_experience,
+          consultation_fee: data.consultation_fee,
         };
 
         await authService.registerDoctor(doctorData);
@@ -107,9 +92,7 @@ const RegisterPage = () => {
         router.push("/login");
       }, 2000);
     } catch (submitError) {
-      setError(submitError.message || "Registration failed. Please try again.");
-    } finally {
-      setLoading(false);
+      setServerError(submitError.message || "Registration failed. Please try again.");
     }
   };
 
@@ -131,17 +114,17 @@ const RegisterPage = () => {
         ),
       }}
     >
-      <RegisterUserTypeToggle userType={userType} onChange={setUserType} />
-      <RegisterAlerts error={error} success={success} />
+      <RegisterUserTypeToggle userType={userType} onChange={handleUserTypeChange} />
+      <RegisterAlerts error={serverError} success={success} />
 
-      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-        <RegisterCommonFields formData={formData} onChange={handleChange} />
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+        <RegisterCommonFields register={register} errors={errors} />
 
-        {userType === "patient" && <RegisterPatientFields formData={formData} onChange={handleChange} />}
+        {userType === "patient" && <RegisterPatientFields register={register} errors={errors} />}
 
-        {userType === "doctor" && <RegisterDoctorFields formData={formData} onChange={handleChange} />}
+        {userType === "doctor" && <RegisterDoctorFields register={register} errors={errors} />}
 
-        <Button type="submit" loading={loading} className="w-full text-lg mt-6">
+        <Button type="submit" loading={isSubmitting} className="w-full text-lg mt-6">
           {`Create ${userType === "patient" ? "Patient" : "Doctor"} Account`}
         </Button>
       </form>
