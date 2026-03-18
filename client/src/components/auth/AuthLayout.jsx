@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { CircleCheckBig, ShoppingBag, Sparkles } from "lucide-react";
 
 const AuthLayout = ({
   children,
@@ -6,27 +6,31 @@ const AuthLayout = ({
   subtitle,
   sidebarTitle,
   sidebarSubtitle,
+  features,
+  bottomLink,
 }) => {
-  const features = [
+  const defaultFeatures = [
     {
-      icon: Check,
+      icon: CircleCheckBig,
       title: "Expert Care",
-      description: "Book appointments with expert dermatologists.",
+      description: "Consult with verified dermatologists",
     },
     {
-      icon: Check,
+      icon: ShoppingBag,
       title: "Premium Products",
-      description: "Shop premium skincare products",
+      description: "Shop curated skincare essentials",
     },
     {
-      icon: Check,
-      title: "Treatment plans",
-      description: "Get personalized treatment plans from dermatologists.",
+      icon: Sparkles,
+      title: "Advanced Treatments",
+      description: "Book professional skincare treatments",
     },
   ];
 
+  const sidebarFeatures = features || defaultFeatures;
+
   return (
-    <div className="min-h-screen bg-gradient-to-r from-[#E6F7F7] to-[#F9FAFB] flex items-center justify-center">
+    <div className="min-h-screen bg-linear-to-r from-[#E6F7F7] to-[#F9FAFB] flex items-center justify-center">
       <div className="bg-white w-full max-w-6xl flex rounded-3xl min-h-80  overflow-hidden shadow-2xl">
         <div className="bg-[#2FA4A9] text-white  p-12  flex-col justify-between hidden  lg:flex">
           <div>
@@ -34,7 +38,7 @@ const AuthLayout = ({
             <p className="text-lg opacity-90 mb-8">{sidebarSubtitle}</p>
 
             <div className="space-y-4">
-              {features.map((feature, index) => (
+              {sidebarFeatures.map((feature, index) => (
                 <div key={index} className="flex gap-2 items-center ">
                   <div className="bg-white flex items-center justify-center w-7 h-7 bg-opacity-20 rounded-full  mr-4 ">
                     <feature.icon className="w-6  text-gray-400 h-5" />
@@ -48,12 +52,12 @@ const AuthLayout = ({
             </div>
           </div>
 
-          {/* {bottomLink && (
+          {bottomLink && (
             <div>
               <p className="text-sm opacity-75">{bottomLink.text}</p>
               {bottomLink.link}
             </div>
-          )} */}
+          )}
         </div>
 
         {/* Right Content */}

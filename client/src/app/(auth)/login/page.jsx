@@ -1,29 +1,21 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import Link from "next/link";
+import { loginSchema } from "@/validators/authSchemas";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { Mail } from "lucide-react";
 import AuthLayout from "@/components/auth/AuthLayout";
-import Input from "@/components/ui/Input";
-import PasswordInput from "@/components/ui/PasswordInput";
-import Button from "@/components/ui/Button";
+import LoginErrorAlert from "@/components/auth/LoginErrorAlert";
+import LoginForm from "@/components/auth/LoginForm";
+import LoginFooter from "@/components/auth/LoginFooter";
 import { loginUser } from "@/store/thunks/authThunks";
-
-const loginSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
 
 const LoginPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { isLoading, error } = useSelector((state) => state.auth);
-  const [authError, setAuthError] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -33,12 +25,10 @@ const LoginPage = () => {
   });
 
   const onSubmit = async (data) => {
-    try {
-      setAuthError("");
-      await dispatch(loginUser(data)).unwrap();
+    const resultAction = await dispatch(loginUser(data));
+
+    if (loginUser.fulfilled.match(resultAction)) {
       router.push("/");
-    } catch (error) {
-      setAuthError(error.message || "An error occurred during login");
     }
   };
 
@@ -49,59 +39,15 @@ const LoginPage = () => {
       sidebarTitle="Welcome Back!"
       sidebarSubtitle="Sign in to access your personalized skincare dashboard"
     >
-      {(authError || error) && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-          {authError || error}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
-        <Input
-          id="email"
-          type="email"
-          label="Email Address"
-          icon={Mail}
-          required
-          {...register("email")}
-          error={errors.email?.message}
-          placeholder="you@example.com"
-        />
-
-        <PasswordInput
-          id="password"
-          label="Password"
-          required
-          {...register("password")}
-          error={errors.password?.message}
-          placeholder="Enter your password"
-        />
-
-        <div className="flex items-center justify-between text-sm">
-          <label className="flex items-center">
-            <input type="checkbox" className="mr-2 accent-[#2FA4A9]" />
-            <span className="text-gray-600">Remember me</span>
-          </label>
-          <a href="#" className="text-[#2FA4A9] hover:underline">
-            Forgot password?
-          </a>
-        </div>
-
-        <Button type="submit" loading={isLoading} className="w-full text-lg">
-          {isLoading ? "Signing in..." : "Sign In"}
-        </Button>
-      </form>
-
-      <div className="mt-8 text-center">
-        <p className="text-gray-600">
-          Don't have an account?{" "}
-          <Link
-            href="/register"
-            className="text-[#2FA4A9] hover:underline font-medium"
-          >
-            Sign up here
-          </Link>
-        </p>
-      </div>
+      <LoginErrorAlert message={error} />
+      <LoginForm
+        register={register}
+        errors={errors}
+        handleSubmit={handleSubmit}
+        onSubmit={onSubmit}
+        isLoading={isLoading}
+      />
+      <LoginFooter />
     </AuthLayout>
   );
 };

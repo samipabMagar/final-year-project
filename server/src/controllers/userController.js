@@ -34,11 +34,16 @@ class UserController {
         role: user.role,
       });
 
-      res.cookie("token", token, {
+      const isProduction = process.env.NODE_ENV === "production";
+      const cookieOptions = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      });
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
+        path: "/",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      };
+
+      res.cookie("token", token, cookieOptions);
 
       res.status(200).json({
         success: true,
@@ -75,9 +80,13 @@ class UserController {
   // Logout user
   async logout(req, res) {
     try {
+      const isProduction = process.env.NODE_ENV === "production";
+
       res.clearCookie("token", {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
+        path: "/",
       });
 
       res.status(200).json({
