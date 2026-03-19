@@ -1,13 +1,44 @@
+const getFirstImagePath = (images) => {
+  if (!images) return null;
+
+  if (Array.isArray(images)) {
+    return images[0] || null;
+  }
+
+  if (typeof images === "string") {
+    try {
+      const parsed = JSON.parse(images);
+      if (Array.isArray(parsed)) {
+        return parsed[0] || null;
+      }
+    } catch {
+      return images;
+    }
+
+    return images;
+  }
+
+  return null;
+};
+
 const resolveImageUrl = (imagePath) => {
   if (!imagePath) return null;
+
   if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
     return imagePath;
   }
 
-  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "";
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001/api";
   const apiOrigin = apiBaseUrl.replace(/\/api\/?$/, "");
-  const cleanedPath = imagePath.replace(/^\/+/, "");
 
+  let normalizedPath = imagePath.replace(/\\/g, "/");
+  const uploadsIndex = normalizedPath.toLowerCase().indexOf("uploads/");
+
+  if (uploadsIndex >= 0) {
+    normalizedPath = normalizedPath.slice(uploadsIndex);
+  }
+
+  const cleanedPath = normalizedPath.replace(/^\/+/, "");
   return `${apiOrigin}/${cleanedPath}`;
 };
 
@@ -19,7 +50,7 @@ const formatCategory = (category = "") => {
 };
 
 const ProductCard = ({ product }) => {
-  const imagePath = Array.isArray(product.images) ? product.images[0] : null;
+  const imagePath = getFirstImagePath(product.images);
   const imageUrl = resolveImageUrl(imagePath);
 
   return (
@@ -32,7 +63,7 @@ const ProductCard = ({ product }) => {
             className="h-52 w-full object-cover transition duration-300 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-52 items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 text-sm font-medium text-slate-500">
+          <div className="flex h-52 items-center justify-center bg-linear-to-br from-slate-100 to-slate-200 text-sm font-medium text-slate-500">
             No image
           </div>
         )}

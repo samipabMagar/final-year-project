@@ -40,7 +40,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Serve static files from uploads directory
-app.use("/uploads", express.static("uploads"));
+app.use(
+  "/uploads",
+  express.static("../uploads", {
+    setHeaders: (res) => {
+      res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+    },
+  }),
+);
 
 const PORT = process.env.PORT || 8001;
 

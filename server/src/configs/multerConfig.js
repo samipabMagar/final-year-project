@@ -4,7 +4,7 @@ import path from "path";
 
 // Profile image storage configuration
 const profileStorage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/profiles/"),
+  destination: (req, file, cb) => cb(null, "../uploads/profiles/"),
   filename: (req, file, cb) => {
     const userId = req.user?.id;
     const imageName = `profile_${userId}_${Date.now()}.${file.originalname.split(".").pop()}`;
@@ -15,7 +15,7 @@ const profileStorage = multer.diskStorage({
 // Product images storage configuration
 const productStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = "uploads/products/";
+    const uploadDir = "../uploads/products/";
     // Create directory if it doesn't exist
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });

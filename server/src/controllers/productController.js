@@ -58,7 +58,10 @@ class ProductController {
 
       // Handle uploaded images - normalize paths to use forward slashes
       if (req.files && req.files.length > 0) {
-        productData.images = req.files.map((file) => file.path.replace(/\\/g, '/'));
+        productData.images = req.files.map((file) => {
+          const normalizedPath = file.path.replace(/\\/g, "/");
+          return normalizedPath.replace(/^\.\.\//, "");
+        });
       }
 
       const newProduct = await productService.createProduct(productData);
