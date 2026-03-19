@@ -9,6 +9,7 @@ import AuthLayout from "@/components/auth/AuthLayout";
 import LoginErrorAlert from "@/components/auth/LoginErrorAlert";
 import LoginForm from "@/components/auth/LoginForm";
 import LoginFooter from "@/components/auth/LoginFooter";
+import { HOME_ROUTE } from "@/constants/routes";
 import { loginUser } from "@/store/thunks/authThunks";
 
 const LoginPage = () => {
@@ -28,7 +29,7 @@ const LoginPage = () => {
     const resultAction = await dispatch(loginUser(data));
 
     if (loginUser.fulfilled.match(resultAction)) {
-      router.push("/");
+      router.push(HOME_ROUTE);
     }
   };
 

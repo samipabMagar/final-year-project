@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { REGISTER_ROUTE } from "@/constants/routes";
 
 const LoginFooter = () => {
   return (
@@ -6,7 +7,7 @@ const LoginFooter = () => {
       <p className="text-gray-600">
         Don't have an account?{" "}
         <Link
-          href="/register"
+          href={REGISTER_ROUTE}
           className="text-[#2FA4A9] hover:underline font-medium"
         >
           Sign up here

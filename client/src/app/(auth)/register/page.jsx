@@ -13,6 +13,7 @@ import RegisterDoctorFields from "@/components/auth/register/RegisterDoctorField
 import RegisterMobileLoginLink from "@/components/auth/register/RegisterMobileLoginLink";
 import RegisterPatientFields from "@/components/auth/register/RegisterPatientFields";
 import RegisterUserTypeToggle from "@/components/auth/register/RegisterUserTypeToggle";
+import { LOGIN_ROUTE } from "@/constants/routes";
 import { authService } from "@/services/authService";
 import { registerSchema } from "@/validators/authSchemas";
 
@@ -89,7 +90,7 @@ const RegisterPage = () => {
       }
 
       setTimeout(() => {
-        router.push("/login");
+        router.push(LOGIN_ROUTE);
       }, 2000);
     } catch (submitError) {
       setServerError(submitError.message || "Registration failed. Please try again.");
@@ -106,7 +107,7 @@ const RegisterPage = () => {
         text: "Already have an account?",
         link: (
           <Link
-            href="/login"
+            href={LOGIN_ROUTE}
             className="text-white font-semibold hover:underline text-lg"
           >
             Sign in here -&gt;
