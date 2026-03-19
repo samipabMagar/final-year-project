@@ -1,112 +1,126 @@
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
-import Button from "@/components/ui/Button";
 import { PRODUCT_CATEGORIES, SKIN_TYPES, SORT_OPTIONS } from "@/constants/productFilters";
+import { RotateCcw, SlidersHorizontal } from "lucide-react";
 
 const ProductFilters = ({
   filters,
-  searchDraft,
   brands,
-  onSearchDraftChange,
-  onSearchSubmit,
   onFilterChange,
   onResetFilters,
 }) => {
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="mb-4 flex flex-col gap-1">
-        <h2 className="text-lg font-semibold text-slate-900">Find your product</h2>
-        <p className="text-sm text-slate-600">Search by name, ingredient, category, skin type, and budget.</p>
+    <aside className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-24">
+      <div className="mb-4 flex items-center gap-2">
+        <div className="rounded-lg bg-[#2FA4A9]/10 p-2 text-[#2FA4A9]">
+          <SlidersHorizontal className="h-4 w-4" />
+        </div>
+        <div>
+          <h2 className="text-base font-semibold text-slate-900">Filter Products</h2>
+          <p className="text-xs text-slate-500">Find your best match quickly</p>
+        </div>
       </div>
 
-      <form onSubmit={onSearchSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-6">
-        <Input
-          id="product-search"
-          placeholder="Search products..."
-          value={searchDraft}
-          onChange={(event) => onSearchDraftChange(event.target.value)}
-          containerClassName="lg:col-span-2"
-        />
+      <div className="space-y-5">
+        <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50/60 p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Sorting & Type</p>
 
-        <Select
-          id="product-category"
-          value={filters.category}
-          onChange={(event) => onFilterChange("category", event.target.value)}
-        >
-          {PRODUCT_CATEGORIES.map((category) => (
-            <option key={category.value || "all-categories"} value={category.value}>
-              {category.label}
-            </option>
-          ))}
-        </Select>
-
-        <Select
-          id="product-skin-type"
-          value={filters.skinType}
-          onChange={(event) => onFilterChange("skinType", event.target.value)}
-        >
-          {SKIN_TYPES.map((skinType) => (
-            <option key={skinType.value || "all-skin-types"} value={skinType.value}>
-              {skinType.label}
-            </option>
-          ))}
-        </Select>
-
-        <Select
-          id="product-brand"
-          value={filters.brandId}
-          onChange={(event) => onFilterChange("brandId", event.target.value)}
-        >
-          <option value="">All brands</option>
-          {brands.map((brand) => (
-            <option key={brand.brand_id} value={brand.brand_id}>
-              {brand.name}
-            </option>
-          ))}
-        </Select>
-
-        <Select
-          id="product-sort"
-          value={filters.sort}
-          onChange={(event) => onFilterChange("sort", event.target.value)}
-        >
-          {SORT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </Select>
-
-        <Input
-          id="min-price"
-          type="number"
-          min="0"
-          placeholder="Min price"
-          value={filters.minPrice}
-          onChange={(event) => onFilterChange("minPrice", event.target.value)}
-        />
-
-        <Input
-          id="max-price"
-          type="number"
-          min="0"
-          placeholder="Max price"
-          value={filters.maxPrice}
-          onChange={(event) => onFilterChange("maxPrice", event.target.value)}
-        />
-
-        <div className="flex items-center gap-2 md:col-span-2 lg:col-span-2">
-          <Button type="submit" className="px-5 py-3">Apply</Button>
-          <Button
-            type="button"
-            className="bg-slate-100 px-5 py-3 text-slate-700 hover:bg-slate-200"
-            onClick={onResetFilters}
+          <Select
+            id="product-sort"
+            label="Sort by"
+            value={filters.sort}
+            onChange={(event) => onFilterChange("sort", event.target.value)}
+            className="h-12"
           >
-            Reset
-          </Button>
+            {SORT_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </Select>
+
+          <Select
+            id="product-category"
+            label="Category"
+            value={filters.category}
+            onChange={(event) => onFilterChange("category", event.target.value)}
+            className="h-12"
+          >
+            {PRODUCT_CATEGORIES.map((category) => (
+              <option key={category.value || "all-categories"} value={category.value}>
+                {category.label}
+              </option>
+            ))}
+          </Select>
+
+          <Select
+            id="product-skin-type"
+            label="Skin type"
+            value={filters.skinType}
+            onChange={(event) => onFilterChange("skinType", event.target.value)}
+            className="h-12"
+          >
+            {SKIN_TYPES.map((skinType) => (
+              <option key={skinType.value || "all-skin-types"} value={skinType.value}>
+                {skinType.label}
+              </option>
+            ))}
+          </Select>
         </div>
-      </form>
-    </section>
+
+        <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50/60 p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Brand & Budget</p>
+
+          <Select
+            id="product-brand"
+            label="Brand"
+            value={filters.brandId}
+            onChange={(event) => onFilterChange("brandId", event.target.value)}
+            className="h-12"
+          >
+            <option value="">All brands</option>
+            {brands.map((brand) => (
+              <option key={brand.brand_id} value={brand.brand_id}>
+                {brand.name}
+              </option>
+            ))}
+          </Select>
+
+          <div className="grid grid-cols-2 gap-3">
+            <Input
+              id="min-price"
+              label="Min price"
+              type="number"
+              min="0"
+              placeholder="0"
+              value={filters.minPrice}
+              onChange={(event) => onFilterChange("minPrice", event.target.value)}
+              className="h-12"
+            />
+
+            <Input
+              id="max-price"
+              label="Max price"
+              type="number"
+              min="0"
+              placeholder="5000"
+              value={filters.maxPrice}
+              onChange={(event) => onFilterChange("maxPrice", event.target.value)}
+              className="h-12"
+            />
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={onResetFilters}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[#2FA4A9]/35 bg-[#2FA4A9]/10 px-4 py-3 text-sm font-semibold text-[#1D7D82] transition hover:bg-[#2FA4A9]/15"
+        >
+          <RotateCcw className="h-4 w-4" />
+          Reset All Filters
+        </button>
+      </div>
+    </aside>
   );
 };
 

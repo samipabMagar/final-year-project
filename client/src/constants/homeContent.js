@@ -1,15 +1,21 @@
 export const services = [
   {
+    icon: "Video",
     title: "Online Consultations",
-    description: "Talk to dermatologists with secure and convenient appointment slots.",
+    description:
+      "Talk to verified dermatologists through secure online consultations, choose a time that fits your daily routine, and get trusted advice without waiting in long clinic lines.",
   },
   {
+    icon: "ClipboardList",
     title: "Personalized Treatment",
-    description: "Receive clear plans tailored to your skin type and goals.",
+    description:
+      "Receive a clear treatment plan designed around your skin type, current concerns, and long-term goals so every step feels practical, easy to follow, and results-focused.",
   },
   {
+    icon: "ShoppingBag",
     title: "Skincare Products",
-    description: "Order products selected for quality and skin safety.",
+    description:
+      "Shop quality skincare products selected for safety, performance, and skin compatibility, so you can buy with confidence and build a routine that truly works for you.",
   },
 ];
 
@@ -23,16 +29,19 @@ export const trustPoints = [
   {
     icon: "ShieldCheck",
     title: "Verified Doctors",
-    description: "All doctor profiles go through approval checks.",
+    description:
+      "Every doctor profile is reviewed through a verification process, giving you peace of mind that your skincare guidance comes from trusted professionals.",
   },
   {
     icon: "Truck",
     title: "Smooth Experience",
-    description: "Simple flows from booking to product ordering.",
+    description:
+      "From booking appointments to ordering recommended products, every step is designed to be smooth, clear, and quick even for first-time users.",
   },
   {
     icon: "Sparkles",
     title: "Modern Platform",
-    description: "Clean interface focused on speed and clarity.",
+    description:
+      "Enjoy a clean modern platform that keeps everything organized, helps you focus on your skincare journey, and saves your time with fast, simple navigation.",
   },
 ];

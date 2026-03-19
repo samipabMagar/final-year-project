@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+:root {
+	--gold-soft: #f5e6b3;
+	--gold-accent: #e7c873;
+	--gold-deep: #c9a13a;
+}
+
 html {
 	font-size: 16px;
 }

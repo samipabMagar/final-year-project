@@ -14,10 +14,10 @@ const HomeHero = () => {
             Trusted Dermatology Care
           </span>
           <h1 className="mt-5 text-4xl font-extrabold leading-tight text-slate-900 md:text-5xl">
-            Skincare support that feels personal, modern, and reliable.
+            Your skin deserves expert care you can trust.
           </h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-slate-600">
-            Connect with verified dermatologists, discover quality products, and follow treatment plans in one simple platform.
+            Talk to verified dermatologists, discover quality products, and follow a clear care plan in one easy platform made for real results.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -42,7 +42,9 @@ const HomeHero = () => {
               <Stethoscope className="h-5 w-5" />
             </div>
             <h3 className="text-lg font-semibold text-slate-900">Expert Dermatologists</h3>
-            <p className="mt-2 text-sm text-slate-600">Access experienced doctors with a guided consultation flow.</p>
+            <p className="mt-2 text-sm text-slate-600">
+              Connect with experienced dermatologists through a guided consultation process that helps you understand your skin and make confident treatment decisions.
+            </p>
           </article>
 
           <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -50,7 +52,9 @@ const HomeHero = () => {
               <ShoppingBag className="h-5 w-5" />
             </div>
             <h3 className="text-base font-semibold text-slate-900">Product Store</h3>
-            <p className="mt-1 text-sm text-slate-600">Shop curated skincare essentials.</p>
+            <p className="mt-1 text-sm text-slate-600">
+              Discover carefully selected skincare essentials that match different skin needs and help you build a routine you can trust every day.
+            </p>
           </article>
 
           <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -58,7 +62,9 @@ const HomeHero = () => {
               <CalendarClock className="h-5 w-5" />
             </div>
             <h3 className="text-base font-semibold text-slate-900">Smart Booking</h3>
-            <p className="mt-1 text-sm text-slate-600">Book appointments in a few clicks.</p>
+            <p className="mt-1 text-sm text-slate-600">
+              Schedule consultations in just a few clicks with flexible time slots that fit your routine and keep your skincare journey moving.
+            </p>
           </article>
         </div>
       </div>

@@ -13,12 +13,12 @@ const AppFooter = () => {
       <div className="relative mx-auto w-full max-w-7xl px-6 py-12">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
           <div>
-            <p className="inline-flex items-center rounded-full border border-[#2FA4A9]/25 bg-[#2FA4A9]/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-teal-100/90">
+            <p className="inline-flex items-center rounded-full border border-[#E7C873]/35 bg-[#F5E6B3]/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#F5E6B3]">
               Skin First Care
             </p>
             <p className="mt-4 text-2xl font-bold tracking-tight text-white">eDermaCare</p>
             <p className="mt-3 max-w-sm text-sm leading-6 text-slate-400">
-              Trusted skincare products and expert dermatology support in one place.
+              Your all-in-one skincare destination for trusted products, expert dermatology support, and personalized care that helps you feel confident in your skin every day.
             </p>
           </div>
 
