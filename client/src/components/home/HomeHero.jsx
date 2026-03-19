@@ -8,7 +8,7 @@ const HomeHero = () => {
       <div className="absolute -left-20 top-10 h-56 w-56 rounded-full bg-[#2FA4A9]/20 blur-3xl" />
       <div className="absolute -right-20 bottom-0 h-64 w-64 rounded-full bg-emerald-200/40 blur-3xl" />
 
-      <div className="relative mx-auto grid w-full max-w-6xl gap-10 px-6 py-16 md:grid-cols-2 md:py-24">
+      <div className="relative mx-auto grid w-full max-w-7xl gap-10 px-6 py-16 md:grid-cols-2 md:py-24">
         <div>
           <span className="inline-flex items-center rounded-full bg-[#2FA4A9]/10 px-3 py-1 text-xs font-semibold text-[#1D7D82]">
             Trusted Dermatology Care

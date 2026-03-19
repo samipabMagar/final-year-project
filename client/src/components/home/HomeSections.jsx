@@ -12,7 +12,7 @@ const ICON_MAP = {
 const HomeSections = () => {
   return (
     <>
-      <section id="services" className="mx-auto w-full max-w-6xl px-6 py-16">
+      <section id="services" className="mx-auto w-full max-w-7xl px-6 py-16">
         <h2 className="text-2xl font-bold text-slate-900 md:text-3xl">Services Built For Everyday Care</h2>
         <div className="mt-8 grid gap-5 md:grid-cols-3">
           {services.map((item) => (
@@ -25,7 +25,7 @@ const HomeSections = () => {
       </section>
 
       <section id="how-it-works" className="bg-slate-50 py-16">
-        <div className="mx-auto w-full max-w-6xl px-6">
+        <div className="mx-auto w-full max-w-7xl px-6">
           <h2 className="text-2xl font-bold text-slate-900 md:text-3xl">How It Works</h2>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {steps.map((step, index) => (
@@ -40,7 +40,7 @@ const HomeSections = () => {
         </div>
       </section>
 
-      <section id="why-us" className="mx-auto w-full max-w-6xl px-6 py-16">
+      <section id="why-us" className="mx-auto w-full max-w-7xl px-6 py-16">
         <h2 className="text-2xl font-bold text-slate-900 md:text-3xl">Why People Choose eDermaCare</h2>
         <div className="mt-8 grid gap-5 md:grid-cols-3">
           {trustPoints.map((item) => {
