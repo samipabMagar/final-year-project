@@ -1,5 +1,6 @@
 import "./globals.css";
 import StoreProvider from "@/store/StoreProvider";
+import ToastProvider from "@/components/ui/ToastProvider";
 
 export const metadata = {
   title: "eDermaCare - Your Skincare & Dermatology Platform",
@@ -13,6 +14,7 @@ export default function RootLayout({ children }) {
       <body>
         <StoreProvider>
           <main>{children}</main>
+          <ToastProvider />
         </StoreProvider>
       </body>
     </html>
