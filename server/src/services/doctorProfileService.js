@@ -99,6 +99,8 @@ class DoctorProfileService {
             "full_name",
             "email",
             "phone",
+            "gender",
+            "address",
             "profile_image",
             "created_at",
           ],

@@ -4,12 +4,59 @@ import { adminService } from "@/services/adminService";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { Check, X, Loader2 } from "lucide-react";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 const PendingDoctorsTable = () => {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoader, setActionLoader] = useState(null);
-  const [rejectModal, setRejectModal] = useState({ show: false, doctorId: null, reason: "" });
+  const [viewDoctor, setViewDoctor] = useState(null);
+  const [rejectModal, setRejectModal] = useState({
+    show: false,
+    doctorId: null,
+    doctorName: "",
+  });
+
+  const getDoctorName = (doctor) => doctor?.user?.full_name || doctor?.full_name || "N/A";
+  const getDoctorEmail = (doctor) => doctor?.user?.email || doctor?.email || "N/A";
+  const getDoctorPhone = (doctor) => doctor?.user?.phone || doctor?.phone || "N/A";
+  const getDoctorGender = (doctor) => doctor?.user?.gender || "N/A";
+  const getDoctorAddress = (doctor) => {
+    const address = doctor?.user?.address;
+    if (!address) return "N/A";
+    if (typeof address === "string") return address;
+    return [address.street, address.city, address.province].filter(Boolean).join(", ") || "N/A";
+  };
+  const getSubmittedDate = (doctor) => {
+    const dateValue = doctor?.user?.created_at || doctor?.created_at;
+    if (!dateValue) return "N/A";
+    return new Date(dateValue).toLocaleDateString();
+  };
+
+  const formatDetailsList = (value, emptyLabel = "Not provided") => {
+    if (!value) return [emptyLabel];
+
+    if (Array.isArray(value)) {
+      if (value.length === 0) return [emptyLabel];
+      return value.map((item) => {
+        if (typeof item === "string") return item;
+        if (typeof item === "object" && item !== null) {
+          return Object.values(item).filter(Boolean).join(" - ") || emptyLabel;
+        }
+        return String(item);
+      });
+    }
+
+    if (typeof value === "string") {
+      return [value];
+    }
+
+    if (typeof value === "object") {
+      return [Object.values(value).filter(Boolean).join(" - ") || emptyLabel];
+    }
+
+    return [String(value)];
+  };
 
   useEffect(() => {
     fetchPendingDoctors();
@@ -32,7 +79,7 @@ const PendingDoctorsTable = () => {
       setActionLoader(doctorId);
       await adminService.approveDoctor(doctorId);
       toast.success("Doctor approved successfully");
-      setDoctors(doctors.filter((d) => d.user_id !== doctorId));
+      setDoctors((prev) => prev.filter((d) => d.user_id !== doctorId));
     } catch (error) {
       toast.error(error.message || "Failed to approve doctor");
     } finally {
@@ -40,15 +87,27 @@ const PendingDoctorsTable = () => {
     }
   };
 
+  const openRejectModal = (doctor) => {
+    setRejectModal({
+      show: true,
+      doctorId: doctor.user_id,
+      doctorName: getDoctorName(doctor),
+    });
+  };
+
+  const closeRejectModal = () => {
+    setRejectModal({ show: false, doctorId: null, doctorName: "" });
+  };
+
   const handleReject = async () => {
     if (!rejectModal.doctorId) return;
 
     try {
       setActionLoader(rejectModal.doctorId);
-      await adminService.rejectDoctor(rejectModal.doctorId, rejectModal.reason);
+      await adminService.rejectDoctor(rejectModal.doctorId, "");
       toast.success("Doctor rejected successfully");
-      setDoctors(doctors.filter((d) => d.user_id !== rejectModal.doctorId));
-      setRejectModal({ show: false, doctorId: null, reason: "" });
+      setDoctors((prev) => prev.filter((d) => d.user_id !== rejectModal.doctorId));
+      closeRejectModal();
     } catch (error) {
       toast.error(error.message || "Failed to reject doctor");
     } finally {
@@ -95,8 +154,8 @@ const PendingDoctorsTable = () => {
             ) : (
               doctors.map((doctor) => (
                 <tr key={doctor.user_id} className="border-b border-slate-200 last:border-b-0 hover:bg-slate-50">
-                  <td className="px-6 py-4 font-medium text-slate-900">{doctor.full_name}</td>
-                  <td className="px-6 py-4 text-slate-600">{doctor.email || "N/A"}</td>
+                  <td className="px-6 py-4 font-medium text-slate-900">{getDoctorName(doctor)}</td>
+                  <td className="px-6 py-4 text-slate-600">{getDoctorEmail(doctor)}</td>
                   <td className="px-6 py-4 text-slate-700">{doctor.specialization}</td>
                   <td className="px-6 py-4">
                     <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800">
@@ -104,7 +163,13 @@ const PendingDoctorsTable = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-4">
+                      <button
+                        onClick={() => setViewDoctor(doctor)}
+                        className="inline-flex items-center gap-1 rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
+                      >
+                        View
+                      </button>
                       <button
                         onClick={() => handleApprove(doctor.user_id)}
                         disabled={actionLoader === doctor.user_id}
@@ -118,13 +183,7 @@ const PendingDoctorsTable = () => {
                         Approve
                       </button>
                       <button
-                        onClick={() =>
-                          setRejectModal({
-                            show: true,
-                            doctorId: doctor.user_id,
-                            reason: "",
-                          })
-                        }
+                        onClick={() => openRejectModal(doctor)}
                         disabled={actionLoader === doctor.user_id}
                         className="inline-flex items-center gap-1 rounded-lg bg-rose-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-rose-600 disabled:opacity-50"
                       >
@@ -145,40 +204,66 @@ const PendingDoctorsTable = () => {
         </div>
       </div>
 
-      {/* Reject Modal */}
-      {rejectModal.show && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="mx-4 w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-xl">
-            <h3 className="mb-4 text-lg font-semibold text-slate-900">
-              Reject Doctor Registration
-            </h3>
-            <p className="mb-4 text-sm text-slate-600">
-              Please provide a reason for rejection (optional)
-            </p>
-            <textarea
-              value={rejectModal.reason}
-              onChange={(e) =>
-                setRejectModal({ ...rejectModal, reason: e.target.value })
-              }
-              className="mb-4 w-full rounded-lg border border-slate-300 p-3 text-sm text-slate-800 outline-none focus:border-(--brand-primary) focus:ring-2 focus:ring-(--brand-primary-soft)"
-              placeholder="Enter rejection reason..."
-              rows={4}
-            />
-            <div className="flex gap-3 justify-end">
+      <ConfirmModal
+        isOpen={rejectModal.show}
+        title="Reject Doctor"
+        message={`Are you sure you want to reject ${rejectModal.doctorName || "this doctor"}?`}
+        confirmText="Reject"
+        cancelText="Cancel"
+        isLoading={Boolean(actionLoader)}
+        onConfirm={handleReject}
+        onCancel={closeRejectModal}
+      />
+
+      {viewDoctor && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="mx-4 w-full max-w-xl rounded-xl bg-white p-5 shadow-xl">
+            <h3 className="text-base font-semibold text-slate-900">Doctor Details</h3>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 text-sm">
+              <p><span className="font-medium text-slate-800">Name:</span> {getDoctorName(viewDoctor)}</p>
+              <p><span className="font-medium text-slate-800">Email:</span> {getDoctorEmail(viewDoctor)}</p>
+              <p><span className="font-medium text-slate-800">Phone:</span> {getDoctorPhone(viewDoctor)}</p>
+              <p><span className="font-medium text-slate-800">Gender:</span> {getDoctorGender(viewDoctor)}</p>
+              <p><span className="font-medium text-slate-800">Address:</span> {getDoctorAddress(viewDoctor)}</p>
+              <p><span className="font-medium text-slate-800">Specialization:</span> {viewDoctor.specialization || "N/A"}</p>
+              <p><span className="font-medium text-slate-800">License:</span> {viewDoctor.license_number || "N/A"}</p>
+              <p><span className="font-medium text-slate-800">Experience:</span> {viewDoctor.years_of_experience ?? "N/A"} years</p>
+              <p><span className="font-medium text-slate-800">Consultation Fee:</span> Rs {Number(viewDoctor.consultation_fee || 0).toFixed(2)}</p>
+              <p><span className="font-medium text-slate-800">Submitted:</span> {getSubmittedDate(viewDoctor)}</p>
+            </div>
+            <div className="mt-4">
+              <p className="mb-1 text-sm font-medium text-slate-800">Bio</p>
+              <p className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+                {viewDoctor.bio || "No bio provided"}
+              </p>
+            </div>
+
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <div>
+                <p className="mb-1 text-sm font-medium text-slate-800">Education</p>
+                <ul className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 space-y-1">
+                  {formatDetailsList(viewDoctor.education, "No education provided").map((item, index) => (
+                    <li key={`education-${index}`}>• {item}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <p className="mb-1 text-sm font-medium text-slate-800">Certifications</p>
+                <ul className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 space-y-1">
+                  {formatDetailsList(viewDoctor.certifications, "No certifications provided").map((item, index) => (
+                    <li key={`certification-${index}`}>• {item}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="mt-5 flex justify-end">
               <button
-                onClick={() =>
-                  setRejectModal({ show: false, doctorId: null, reason: "" })
-                }
+                onClick={() => setViewDoctor(null)}
                 className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
               >
-                Cancel
-              </button>
-              <button
-                onClick={handleReject}
-                disabled={actionLoader}
-                className="rounded-lg bg-rose-500 px-4 py-2 text-sm font-medium text-white hover:bg-rose-600 disabled:opacity-50"
-              >
-                {actionLoader ? "Processing..." : "Reject"}
+                Close
               </button>
             </div>
           </div>

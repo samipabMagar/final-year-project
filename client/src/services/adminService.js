@@ -79,7 +79,7 @@ export const adminService = {
   // Doctor Management
   async getPendingDoctors() {
     try {
-      const response = await api.get("/doctor-profiles/admin/pending");
+      const response = await api.get("/doctors/admin/pending");
       return response.data?.data ?? [];
     } catch (error) {
       throw new Error(getApiErrorMessage(error, "Failed to fetch pending doctors"));
@@ -88,7 +88,7 @@ export const adminService = {
 
   async approveDoctor(userId) {
     try {
-      const response = await api.put(`/doctor-profiles/admin/${userId}/approve`);
+      const response = await api.put(`/doctors/admin/${userId}/approve`);
       return response.data;
     } catch (error) {
       throw new Error(getApiErrorMessage(error, "Failed to approve doctor"));
@@ -97,7 +97,7 @@ export const adminService = {
 
   async rejectDoctor(userId, rejection_reason) {
     try {
-      const response = await api.put(`/doctor-profiles/admin/${userId}/reject`, {
+      const response = await api.put(`/doctors/admin/${userId}/reject`, {
         rejection_reason,
       });
       return response.data;
@@ -112,7 +112,7 @@ export const adminService = {
       if (filters.is_available !== undefined) params.is_available = filters.is_available;
       if (filters.specialization) params.specialization = filters.specialization;
 
-      const response = await api.get("/doctor-profiles", { params });
+      const response = await api.get("/doctors", { params });
       return response.data?.data ?? [];
     } catch (error) {
       throw new Error(getApiErrorMessage(error, "Failed to fetch doctors"));
