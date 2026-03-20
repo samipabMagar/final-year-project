@@ -17,6 +17,7 @@ const buildQueryParams = (filters = {}) => {
   if (filters.brandId) params.brandId = filters.brandId;
   if (filters.minPrice) params.minPrice = filters.minPrice;
   if (filters.maxPrice) params.maxPrice = filters.maxPrice;
+  if (filters.sort) params.sort = filters.sort;
 
   return params;
 };

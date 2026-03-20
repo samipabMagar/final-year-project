@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
+import path from "path";
+import { fileURLToPath } from "url";
 import connection from "./configs/db.js";
 import "./models/index.js"; 
 import routes from "./routes/index.js";
@@ -12,6 +14,9 @@ import routes from "./routes/index.js";
 dotenv.config();
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadsDir = path.resolve(__dirname, "../uploads");
 
 // Security Middleware
 app.use(helmet());
@@ -39,10 +44,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Serve static files from uploads directory
+// Serve static files from server/uploads
 app.use(
   "/uploads",
-  express.static("../uploads", {
+  express.static(uploadsDir, {
     setHeaders: (res) => {
       res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
     },

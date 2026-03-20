@@ -1,10 +1,26 @@
 import multer from "multer";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const UPLOADS_ROOT = path.resolve(__dirname, "../../uploads");
+const PROFILES_DIR = path.join(UPLOADS_ROOT, "profiles");
+const PRODUCTS_DIR = path.join(UPLOADS_ROOT, "products");
+
+const ensureDir = (dirPath) => {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
+};
 
 // Profile image storage configuration
 const profileStorage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "../uploads/profiles/"),
+  destination: (req, file, cb) => {
+    ensureDir(PROFILES_DIR);
+    cb(null, PROFILES_DIR);
+  },
   filename: (req, file, cb) => {
     const userId = req.user?.id;
     const imageName = `profile_${userId}_${Date.now()}.${file.originalname.split(".").pop()}`;
@@ -15,12 +31,8 @@ const profileStorage = multer.diskStorage({
 // Product images storage configuration
 const productStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = "../uploads/products/";
-    // Create directory if it doesn't exist
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
+    ensureDir(PRODUCTS_DIR);
+    cb(null, PRODUCTS_DIR);
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = `${Date.now()}_${Math.round(Math.random() * 1e9)}`;

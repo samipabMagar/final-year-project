@@ -1,0 +1,108 @@
+import api from "./api";
+
+const getApiErrorMessage = (error, fallbackMessage) => {
+  return (
+    error.response?.data?.errors?.[0]?.message ||
+    error.response?.data?.message ||
+    fallbackMessage
+  );
+};
+
+export const adminService = {
+  // Product Management
+  async createProduct(formData) {
+    try {
+      const response = await api.post("/products", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error, "Failed to create product"));
+    }
+  },
+
+  async updateProduct(productId, formData) {
+    try {
+      const response = await api.put(`/products/${productId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error, "Failed to update product"));
+    }
+  },
+
+  async deleteProduct(productId) {
+    try {
+      const response = await api.delete(`/products/${productId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error, "Failed to delete product"));
+    }
+  },
+
+  async getProductById(productId) {
+    try {
+      const response = await api.get(`/products/${productId}`);
+      return response.data?.data;
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error, "Failed to fetch product"));
+    }
+  },
+
+  async getBrands() {
+    try {
+      const response = await api.get("/brands");
+      return response.data?.data ?? [];
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error, "Failed to fetch brands"));
+    }
+  },
+
+  // Doctor Management
+  async getPendingDoctors() {
+    try {
+      const response = await api.get("/doctor-profiles/admin/pending");
+      return response.data?.data ?? [];
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error, "Failed to fetch pending doctors"));
+    }
+  },
+
+  async approveDoctor(userId) {
+    try {
+      const response = await api.put(`/doctor-profiles/admin/${userId}/approve`);
+      return response.data;
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error, "Failed to approve doctor"));
+    }
+  },
+
+  async rejectDoctor(userId, rejection_reason) {
+    try {
+      const response = await api.put(`/doctor-profiles/admin/${userId}/reject`, {
+        rejection_reason,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error, "Failed to reject doctor"));
+    }
+  },
+
+  async getAllDoctors(filters = {}) {
+    try {
+      const params = {};
+      if (filters.is_available !== undefined) params.is_available = filters.is_available;
+      if (filters.specialization) params.specialization = filters.specialization;
+
+      const response = await api.get("/doctor-profiles", { params });
+      return response.data?.data ?? [];
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error, "Failed to fetch doctors"));
+    }
+  },
+};

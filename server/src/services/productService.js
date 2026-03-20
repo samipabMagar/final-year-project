@@ -13,8 +13,18 @@ class ProductService {
       search,
       isActive,
       brandId,
+      sort,
     } = filters;
     const whereClause = {};
+
+    const sortMap = {
+      newest: ["created_at", "DESC"],
+      "price-asc": ["price", "ASC"],
+      "price-desc": ["price", "DESC"],
+      "rating-desc": ["rating", "DESC"],
+      "name-asc": ["name", "ASC"],
+    };
+    const orderBy = sortMap[sort] ?? sortMap.newest;
 
     if (category) {
       whereClause.category = category;
@@ -56,7 +66,7 @@ class ProductService {
           attributes: ["brand_id", "name", "logo_url"],
         },
       ],
-      order: [["created_at", "DESC"]],
+      order: [orderBy],
     });
 
     return products;

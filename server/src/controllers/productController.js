@@ -11,6 +11,7 @@ class ProductController {
         search: req.query.search,
         isActive: req.query.isActive,
         brandId: req.query.brandId,
+        sort: req.query.sort,
       };
 
       const products = await productService.getAllProducts(filters);
