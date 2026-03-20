@@ -1,8 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
-import { Loader2, Search, Trash2 } from "lucide-react";
+import { Loader2, Pencil, Search, Trash2 } from "lucide-react";
 import { adminService } from "@/services/adminService";
 import { formatCategory, getFirstImagePath, resolveImageUrl } from "@/utils/products/productCardHelpers";
 
@@ -161,19 +162,31 @@ const ProductManagementTable = () => {
                     <td className="px-4 py-4 font-medium text-slate-900">Rs {Number(product.price || 0).toFixed(2)}</td>
                     <td className="px-4 py-4 text-slate-700">{product.stock_quantity ?? 0}</td>
                     <td className="px-4 py-4">
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(product)}
-                        disabled={deletingId === product.product_id}
-                        className="inline-flex items-center gap-1 rounded-lg bg-rose-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-rose-600 disabled:opacity-50"
-                      >
-                        {deletingId === product.product_id ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <Trash2 className="h-4 w-4" />
-                        )}
-                        Delete
-                      </button>
+                      <div className="flex items-center gap-4">
+                        <Link
+                          href={`/admin/products/${product.product_id}/edit`}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+                          title="Edit product"
+                          aria-label="Edit product"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Link>
+
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(product)}
+                          disabled={deletingId === product.product_id}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-rose-600 text-white transition hover:bg-rose-600 disabled:opacity-50"
+                          title="Delete product"
+                          aria-label="Delete product"
+                        >
+                          {deletingId === product.product_id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Trash2 className="h-4 w-4" />
+                          )}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );
