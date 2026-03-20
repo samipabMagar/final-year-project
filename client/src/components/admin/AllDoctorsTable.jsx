@@ -54,7 +54,7 @@ const AllDoctorsTable = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-[#2FA4A9]" />
+        <Loader2 className="h-8 w-8 animate-spin text-[var(--brand-primary)]" />
       </div>
     );
   }
@@ -77,14 +77,14 @@ const AllDoctorsTable = () => {
               placeholder="Search by name or specialization..."
               value={search}
               onChange={(e) => handleSearch(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 py-2 pl-10 pr-4 text-sm text-slate-800 outline-none focus:border-[#2FA4A9] focus:ring-2 focus:ring-[#2FA4A9]/20"
+              className="w-full rounded-lg border border-slate-300 py-2 pl-10 pr-4 text-sm text-slate-800 outline-none focus:border-(--brand-primary) focus:ring-2 focus:ring-(--brand-primary-soft)"
             />
           </div>
         </div>
         <select
           value={filterAvailable}
           onChange={(e) => handleFilterChange(e.target.value)}
-          className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-700 outline-none focus:border-[#2FA4A9] focus:ring-2 focus:ring-[#2FA4A9]/20"
+          className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-700 outline-none focus:border-(--brand-primary) focus:ring-2 focus:ring-(--brand-primary-soft)"
         >
           <option value="">All Availability</option>
           <option value="true">Available</option>

@@ -4,6 +4,26 @@
 	--gold-soft: #f5e6b3;
 	--gold-accent: #e7c873;
 	--gold-deep: #c9a13a;
+	--brand-primary: #2fa4a9;
+	--brand-primary-hover: #25888d;
+	--brand-primary-soft: #e8f7f8;
+	--brand-primary-text: #1d7d82;
+}
+
+.text-brand-primary {
+	color: var(--brand-primary);
+}
+
+.text-brand-primary-text {
+	color: var(--brand-primary-text);
+}
+
+.bg-brand-primary {
+	background-color: var(--brand-primary);
+}
+
+.bg-brand-primary-soft {
+	background-color: var(--brand-primary-soft);
 }
 
 html {

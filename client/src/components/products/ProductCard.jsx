@@ -22,7 +22,7 @@ const ProductCard = ({ product }) => {
             No image
           </div>
         )}
-        <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-700">
+        <span className="absolute left-3 top-3 rounded-full border border-[#E7C873]/70 bg-[#F5E6B3]/95 px-3 py-1 text-xs font-semibold text-[#8A6B21] shadow-sm">
           {formatCategory(product.category)}
         </span>
       </div>

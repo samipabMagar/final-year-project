@@ -29,7 +29,10 @@ const AdminDashboardPage = () => {
   return (
     <div className="space-y-8">
       <section className="rounded-2xl border border-slate-200/80 bg-white/90 p-6 shadow-sm sm:p-8">
-        <span className="inline-flex items-center rounded-full bg-[#2FA4A9]/10 px-3 py-1 text-xs font-semibold text-[#1D7D82]">
+        <span
+          className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold"
+          style={{ backgroundColor: "var(--brand-primary-soft)", color: "var(--brand-primary-text)" }}
+        >
           Admin Dashboard
         </span>
         <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
@@ -46,12 +49,20 @@ const AdminDashboardPage = () => {
           return (
             <Link key={stat.href} href={stat.href} className="group">
               <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-                <div className="mb-4 inline-flex rounded-xl bg-[#2FA4A9]/10 p-3 text-[#2FA4A9]">
+                <div
+                  className="mb-4 inline-flex rounded-xl p-3"
+                  style={{ backgroundColor: "var(--brand-primary-soft)", color: "var(--brand-primary)" }}
+                >
                   <Icon className="h-6 w-6" />
                 </div>
                 <h3 className="text-lg font-semibold text-slate-900">{stat.label}</h3>
                 <p className="mt-1 text-sm text-slate-600">{stat.value}</p>
-                <p className="mt-4 text-sm font-medium text-[#1D7D82] group-hover:text-[#16666B]">Open section</p>
+                <p
+                  className="mt-4 text-sm font-medium"
+                  style={{ color: "var(--brand-primary-text)" }}
+                >
+                  Open section
+                </p>
               </article>
             </Link>
           );

@@ -59,7 +59,7 @@ const PendingDoctorsTable = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-[#2FA4A9]" />
+        <Loader2 className="h-8 w-8 animate-spin text-slate-500" />
       </div>
     );
   }
@@ -160,7 +160,7 @@ const PendingDoctorsTable = () => {
               onChange={(e) =>
                 setRejectModal({ ...rejectModal, reason: e.target.value })
               }
-              className="mb-4 w-full rounded-lg border border-slate-300 p-3 text-sm text-slate-800 outline-none focus:border-[#2FA4A9] focus:ring-2 focus:ring-[#2FA4A9]/20"
+              className="mb-4 w-full rounded-lg border border-slate-300 p-3 text-sm text-slate-800 outline-none focus:border-(--brand-primary) focus:ring-2 focus:ring-(--brand-primary-soft)"
               placeholder="Enter rejection reason..."
               rows={4}
             />

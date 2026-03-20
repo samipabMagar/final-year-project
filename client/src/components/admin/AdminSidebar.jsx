@@ -32,7 +32,7 @@ const AdminSidebar = () => {
   return (
     <aside className="z-30 w-full border-b border-slate-200/80 bg-white/90 backdrop-blur lg:fixed lg:left-0 lg:top-0 lg:h-screen lg:w-72 lg:overflow-y-auto lg:border-b-0 lg:border-r">
       <div className="px-6 pb-4 pt-6 lg:pb-6">
-        <p className="text-xs font-semibold uppercase tracking-wider text-[#1D7D82]">
+        <p className="text-xs font-semibold uppercase tracking-wider text-[var(--brand-primary-text)]">
           Administration
         </p>
         <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-900">
@@ -55,7 +55,7 @@ const AdminSidebar = () => {
               href={item.href}
               className={`group flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition lg:w-full ${
                 isActive
-                  ? "bg-[#2FA4A9] text-white shadow-sm"
+                  ? "bg-[var(--brand-primary)] text-white shadow-sm"
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               }`}
             >

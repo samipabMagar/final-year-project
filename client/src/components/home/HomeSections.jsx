@@ -28,7 +28,7 @@ const STEP_ICONS = [UserRound, CalendarCheck2, LineChart];
 const HomeSections = () => {
   return (
     <>
-      <section id="services" className="mx-auto w-full max-w-7xl px-6 py-16">
+      <section id="services" className="mx-auto w-full max-w-7xl px-6 py-10">
         <div className="max-w-3xl">
           <h2 className="text-2xl font-bold text-slate-900 md:text-3xl">Services Built For Everyday Care</h2>
           <p className="mt-3 text-slate-600">
@@ -56,7 +56,7 @@ const HomeSections = () => {
         </div>
       </section>
 
-      <section id="how-it-works" className="bg-slate-50 py-16">
+      <section id="how-it-works" className="bg-slate-50 py-10">
         <div className="mx-auto w-full max-w-7xl px-6">
           <div className="max-w-3xl">
             <h2 className="text-2xl font-bold text-slate-900 md:text-3xl">How It Works</h2>
@@ -98,7 +98,7 @@ const HomeSections = () => {
         </div>
       </section>
 
-      <section id="why-us" className="mx-auto w-full max-w-7xl px-6 py-16">
+      <section id="why-us" className="mx-auto w-full max-w-7xl px-6 py-10">
         <h2 className="text-2xl font-bold text-slate-900 md:text-3xl">Why People Choose eDermaCare</h2>
         <div className="mt-8 grid gap-5 md:grid-cols-3">
           {trustPoints.map((item) => {

@@ -17,7 +17,7 @@ const AdminProductsPage = () => {
         action={
           <Link
             href={ROUTES.ADMIN_PRODUCTS_NEW}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#2FA4A9] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#25888d]"
+            className="inline-flex items-center gap-2 rounded-lg bg-[var(--brand-primary)] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[var(--brand-primary-hover)]"
           >
             <Plus size={20} />
             Add New Product

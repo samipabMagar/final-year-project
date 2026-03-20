@@ -43,7 +43,7 @@ const EditProductPage = () => {
       <div className="w-full rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         {loading ? (
           <div className="flex h-56 items-center justify-center">
-            <Loader2 className="h-7 w-7 animate-spin text-[#2FA4A9]" />
+            <Loader2 className="h-7 w-7 animate-spin text-brand-primary" />
           </div>
         ) : product ? (
           <ProductForm product={product} />

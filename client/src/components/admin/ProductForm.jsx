@@ -120,7 +120,7 @@ const ProductForm = ({ product }) => {
           </label>
           <input
             type="text"
-            className="block w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 text-sm text-slate-900 outline-none focus:border-[#2FA4A9] focus:ring-2 focus:ring-[#2FA4A9]/20"
+            className="block w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 text-sm text-slate-900 outline-none focus:border-(--brand-primary) focus:ring-2 focus:ring-(--brand-primary-soft)"
             placeholder="Type product name"
             required
             {...register("name")}
@@ -132,7 +132,7 @@ const ProductForm = ({ product }) => {
             Brand *
           </label>
           <select
-            className="block w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 text-sm text-slate-900 outline-none focus:border-[#2FA4A9] focus:ring-2 focus:ring-[#2FA4A9]/20"
+            className="block w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 text-sm text-slate-900 outline-none focus:border-(--brand-primary) focus:ring-2 focus:ring-(--brand-primary-soft)"
             required
             {...register("brand_id")}
           >
@@ -151,7 +151,7 @@ const ProductForm = ({ product }) => {
           </label>
           <input
             type="number"
-            className="block w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 text-sm text-slate-900 outline-none focus:border-[#2FA4A9] focus:ring-2 focus:ring-[#2FA4A9]/20"
+            className="block w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 text-sm text-slate-900 outline-none focus:border-(--brand-primary) focus:ring-2 focus:ring-(--brand-primary-soft)"
             placeholder="Rs. 10000"
             required
             {...register("price")}
@@ -163,7 +163,7 @@ const ProductForm = ({ product }) => {
             Category *
           </label>
           <select
-            className="block w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 text-sm text-slate-900 outline-none focus:border-[#2FA4A9] focus:ring-2 focus:ring-[#2FA4A9]/20"
+            className="block w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 text-sm text-slate-900 outline-none focus:border-(--brand-primary) focus:ring-2 focus:ring-(--brand-primary-soft)"
             required
             {...register("category")}
           >
@@ -182,7 +182,7 @@ const ProductForm = ({ product }) => {
           </label>
           <input
             type="number"
-            className="block w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 text-sm text-slate-900 outline-none focus:border-[#2FA4A9] focus:ring-2 focus:ring-[#2FA4A9]/20"
+            className="block w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 text-sm text-slate-900 outline-none focus:border-(--brand-primary) focus:ring-2 focus:ring-(--brand-primary-soft)"
             placeholder="10"
             {...register("stock_quantity")}
           />
@@ -259,7 +259,7 @@ const ProductForm = ({ product }) => {
           </label>
           <textarea
             rows={6}
-            className="block w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 text-sm text-slate-900 outline-none focus:border-[#2FA4A9] focus:ring-2 focus:ring-[#2FA4A9]/20"
+            className="block w-full rounded-lg border border-slate-300 bg-slate-50 p-2.5 text-sm text-slate-900 outline-none focus:border-(--brand-primary) focus:ring-2 focus:ring-(--brand-primary-soft)"
             placeholder="Your description here"
             {...register("description")}
           />
@@ -269,7 +269,7 @@ const ProductForm = ({ product }) => {
       <button
         type="submit"
         disabled={loading}
-        className="mt-6 inline-flex cursor-pointer items-center rounded-lg bg-[#2FA4A9] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#25888d] disabled:opacity-50"
+        className="mt-6 inline-flex cursor-pointer items-center rounded-lg bg-[var(--brand-primary)] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[var(--brand-primary-hover)] disabled:opacity-50"
       >
         {loading ? "Saving..." : product ? "Update Product" : "Add Product"}
       </button>

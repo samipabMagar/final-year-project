@@ -26,13 +26,13 @@ const ProductCatalog = () => {
         <div className="absolute right-0 top-40 h-96 w-96 rounded-full bg-[#F5E6B3]/20 blur-3xl" />
       </div>
 
-      <section className="relative z-10 border-b border-slate-200/80 bg-transparent">
-        <div className="mx-auto w-full max-w-7xl px-6 py-5">
+      <section className="relative z-10  border-slate-200/80 bg-transparent">
+        <div className="mx-auto w-full max-w-7xl px-6 py-2">
           <ProductSearchBar searchDraft={searchDraft} onSearchDraftChange={setSearchDraft} />
         </div>
       </section>
 
-      <main className="relative z-10 mx-auto w-full max-w-7xl space-y-6 px-6 py-8">
+      <main className="relative z-10 mx-auto w-full max-w-7xl  px-6 py-2 pb-10">
         {error && (
           <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
             {error}

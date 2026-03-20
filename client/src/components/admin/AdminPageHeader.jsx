@@ -6,14 +6,14 @@ const AdminPageHeader = ({ icon: Icon, badge, title, description, action }) => {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           {badge ? (
-            <span className="inline-flex items-center rounded-full bg-[#2FA4A9]/10 px-3 py-1 text-xs font-semibold text-[#1D7D82]">
+            <span className="inline-flex items-center rounded-full bg-(--brand-primary-soft) px-3 py-1 text-xs font-semibold text-(--brand-primary-text)">
               {badge}
             </span>
           ) : null}
 
           <div className="mt-3 flex items-center gap-3">
             {Icon ? (
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#2FA4A9]/10 text-[#2FA4A9]">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-(--brand-primary-soft) text-(--brand-primary)">
                 <Icon className="h-5 w-5" />
               </span>
             ) : null}
