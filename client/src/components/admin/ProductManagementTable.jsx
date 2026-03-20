@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { Loader2, Pencil, Search, Trash2 } from "lucide-react";
 import { adminService } from "@/services/adminService";
 import { formatCategory, getFirstImagePath, resolveImageUrl } from "@/utils/products/productCardHelpers";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 const ProductManagementTable = () => {
   const [products, setProducts] = useState([]);
@@ -13,6 +14,7 @@ const ProductManagementTable = () => {
   const [deletingId, setDeletingId] = useState(null);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
+  const [deleteModal, setDeleteModal] = useState({ show: false, product: null });
 
   useEffect(() => {
     fetchProducts();
@@ -47,14 +49,22 @@ const ProductManagementTable = () => {
     });
   }, [products, search, category]);
 
-  const handleDelete = async (product) => {
-    const confirmed = window.confirm(`Delete ${product.name}?`);
-    if (!confirmed) return;
+  const confirmDelete = (product) => {
+    setDeleteModal({ show: true, product });
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModal({ show: false, product: null });
+  };
+
+  const handleDelete = async () => {
+    if (!deleteModal.product) return;
 
     try {
-      setDeletingId(product.product_id);
-      await adminService.deleteProduct(product.product_id);
-      setProducts((prev) => prev.filter((p) => p.product_id !== product.product_id));
+      setDeletingId(deleteModal.product.product_id);
+      await adminService.deleteProduct(deleteModal.product.product_id);
+      setProducts((prev) => prev.filter((p) => p.product_id !== deleteModal.product.product_id));
+      closeDeleteModal();
       toast.success("Product deleted successfully");
     } catch (error) {
       toast.error(error.message || "Failed to delete product");
@@ -174,7 +184,7 @@ const ProductManagementTable = () => {
 
                         <button
                           type="button"
-                          onClick={() => handleDelete(product)}
+                          onClick={() => confirmDelete(product)}
                           disabled={deletingId === product.product_id}
                           className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-rose-600 text-white transition hover:bg-rose-600 disabled:opacity-50"
                           title="Delete product"
@@ -195,6 +205,17 @@ const ProductManagementTable = () => {
           </tbody>
         </table>
       </div>
+
+      <ConfirmModal
+        isOpen={deleteModal.show}
+        title="Confirm Delete"
+        message={`Are you sure you want to delete ${deleteModal.product?.name || "this product"}?`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        isLoading={Boolean(deletingId)}
+        onConfirm={handleDelete}
+        onCancel={closeDeleteModal}
+      />
     </div>
   );
 };
