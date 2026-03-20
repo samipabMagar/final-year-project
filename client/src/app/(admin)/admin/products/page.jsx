@@ -4,10 +4,11 @@ import Link from "next/link";
 import { Plus, ShoppingBag } from "lucide-react";
 import { ROUTES } from "@/constants/routes";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
+import ProductManagementTable from "@/components/admin/ProductManagementTable";
 
 const AdminProductsPage = () => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       <AdminPageHeader
         badge="Product Management"
         icon={ShoppingBag}
@@ -24,11 +25,8 @@ const AdminProductsPage = () => {
         }
       />
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
-        <h2 className="text-lg font-semibold text-slate-900">Products List Coming Next</h2>
-        <p className="mt-2 text-sm text-slate-600 sm:text-base">
-          This section will show all products with edit and delete actions.
-        </p>
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <ProductManagementTable />
       </div>
     </div>
   );

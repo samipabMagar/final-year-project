@@ -10,6 +10,19 @@ const getApiErrorMessage = (error, fallbackMessage) => {
 
 export const adminService = {
   // Product Management
+  async getProducts(filters = {}) {
+    try {
+      const params = {};
+      if (filters.search) params.search = filters.search;
+      if (filters.category) params.category = filters.category;
+
+      const response = await api.get("/products", { params });
+      return response.data?.data ?? [];
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error, "Failed to fetch products"));
+    }
+  },
+
   async createProduct(formData) {
     try {
       const response = await api.post("/products", formData, {
