@@ -4,7 +4,7 @@ import { LOGIN_ROUTE, REGISTER_ROUTE } from "@/constants/routes";
 
 const HomeHero = () => {
   return (
-    <section className="relative overflow-hidden bg-linear-to-br from-[#E6F7F7] via-white to-[#F2FBFB]">
+    <section className="relative overflow-hidden bg-linear-to-br from-[#E6F7F7]  to-[#F2FBFB]">
       <div className="absolute -left-20 top-10 h-56 w-56 rounded-full bg-[#2FA4A9]/20 blur-3xl" />
       <div className="absolute -right-20 bottom-0 h-64 w-64 rounded-full bg-emerald-200/40 blur-3xl" />
 
@@ -37,7 +37,7 @@ const HomeHero = () => {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:col-span-2">
+          <article className="rounded-2xl bg-linear-to-r from-[#c7eded]  to-[#a9dddd]  p-5 shadow-sm sm:col-span-2">
             <div className="mb-3 inline-flex rounded-lg bg-[#2FA4A9]/10 p-2 text-[#2FA4A9]">
               <Stethoscope className="h-5 w-5" />
             </div>
@@ -47,7 +47,7 @@ const HomeHero = () => {
             </p>
           </article>
 
-          <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <article className="rounded-2xl  bg-linear-to-r from-[#c7eded]  to-[#a9dddd] p-5 shadow-sm">
             <div className="mb-3 inline-flex rounded-lg bg-[#2FA4A9]/10 p-2 text-[#2FA4A9]">
               <ShoppingBag className="h-5 w-5" />
             </div>
@@ -57,7 +57,7 @@ const HomeHero = () => {
             </p>
           </article>
 
-          <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <article className="rounded-2xl bg-linear-to-r from-[#c7eded]  to-[#a9dddd] p-5 shadow-sm">
             <div className="mb-3 inline-flex rounded-lg bg-[#2FA4A9]/10 p-2 text-[#2FA4A9]">
               <CalendarClock className="h-5 w-5" />
             </div>

@@ -9,8 +9,8 @@ const ProductCard = ({ product }) => {
   const imageUrl = resolveImageUrl(imagePath);
 
   return (
-    <article className="group rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-      <div className="relative mb-4 overflow-hidden rounded-xl bg-slate-100">
+    <article className="group rounded-2xl border border-[#2FA4A9]/15 bg-linear-to-r from-[#d7f3f3] to-[#c4eaea] p-3.5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+      <div className="relative mb-4 overflow-hidden rounded-xl border border-[#2FA4A9]/15 bg-white/80">
         {imageUrl ? (
           <img
             src={imageUrl}
@@ -18,7 +18,7 @@ const ProductCard = ({ product }) => {
             className="h-44 w-full object-cover transition duration-300 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-44 items-center justify-center bg-linear-to-br from-slate-100 to-slate-200 text-sm font-medium text-slate-500">
+          <div className="flex h-44 items-center justify-center bg-linear-to-br from-[#E8F7F8] to-[#DDF2F3] text-sm font-medium text-[#1D7D82]">
             No image
           </div>
         )}

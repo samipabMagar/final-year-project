@@ -30,18 +30,18 @@ const AdminSidebar = () => {
   ];
 
   return (
-    <aside className="z-30 w-full border-b border-slate-200/80 bg-white/90 backdrop-blur lg:fixed lg:left-0 lg:top-0 lg:h-screen lg:w-72 lg:overflow-y-auto lg:border-b-0 lg:border-r">
+    <aside className="z-30 w-full border-b border-[#1D7D82] bg-[#2FA4A9] lg:fixed lg:left-0 lg:top-0 lg:h-screen lg:w-72 lg:overflow-y-auto lg:border-b-0 lg:border-r">
       <div className="px-6 pb-4 pt-6 lg:pb-6">
-        <p className="text-xs font-semibold uppercase tracking-wider text-[var(--brand-primary-text)]">
+        <p className="text-xs font-semibold uppercase tracking-wider text-white/85">
           Administration
         </p>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-900">
+        <h1 className="mt-1 text-2xl font-bold tracking-tight text-white">
           eDermaCare
         </h1>
-        <p className="mt-2 text-sm text-slate-600">Manage doctors and products from one place.</p>
+        <p className="mt-2 text-sm text-white/85">Manage doctors and products from one place.</p>
       </div>
 
-      <nav className="flex gap-2 shadow-sm rounded-2xl mx-2 p-2 overflow-x-auto px-4 pb-4 lg:block lg:space-y-2 lg:overflow-visible lg:px-4">
+      <nav className="mx-2 flex gap-2 rounded-2xl bg-white/10 p-2 shadow-sm overflow-x-auto px-4 pb-4 lg:block lg:space-y-2 lg:overflow-visible lg:px-4">
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive =
@@ -53,13 +53,13 @@ const AdminSidebar = () => {
             <Link
               key={item.href}
               href={item.href}
-              className={`group flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition lg:w-full ${
+              className={`group flex border-b border-white/30 shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition lg:w-full ${
                 isActive
-                  ? "bg-brand-primary text-white shadow-sm"
-                  : "text-slate-600 border-b border-[#25888d]/50 hover:bg-slate-100   hover:text-slate-900"
+                  ? "bg-white text-[#1D7D82] shadow-sm"
+                  : "text-white/90 hover:bg-white/15 hover:text-white"
               }`}
             >
-              <Icon className={`h-4 w-4 ${isActive ? "text-white" : "text-slate-500 group-hover:text-slate-900"}`} />
+              <Icon className={`h-4 w-4 ${isActive ? "text-[#1D7D82]" : "text-white/85 group-hover:text-white"}`} />
               <span>{item.label}</span>
             </Link>
           );
