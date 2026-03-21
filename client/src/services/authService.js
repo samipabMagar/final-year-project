@@ -52,4 +52,14 @@ export const authService = {
       return null;
     }
   },
+
+  // logout user and clear auth cookie on server
+  async logout() {
+    try {
+      const response = await api.post("/users/logout");
+      return response.data;
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error, "Logout failed"));
+    }
+  },
 };

@@ -2,8 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { User } from "lucide-react";
+import {
+  LucideShoppingBag,
+  ShoppingBag,
+  ShoppingBagIcon,
+  ShoppingBasket,
+  ShoppingCart,
+} from "lucide-react";
 import { authService } from "@/services/authService";
+import ProfileMenuModal from "@/components/layout/ProfileMenuModal";
 import {
   HOME_ROUTE,
   LOGIN_ROUTE,
@@ -60,13 +67,20 @@ const AppNavbar = () => {
   return (
     <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/90 backdrop-blur">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4">
-        <Link href={HOME_ROUTE} className="text-xl font-bold tracking-tight text-slate-900">
+        <Link
+          href={HOME_ROUTE}
+          className="text-xl font-bold tracking-tight text-slate-900"
+        >
           eDermaCare
         </Link>
 
         <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex">
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="transition hover:text-slate-900">
+            <Link
+              key={link.href}
+              href={link.href}
+              className="transition hover:text-slate-900"
+            >
               {link.label}
             </Link>
           ))}
@@ -74,20 +88,19 @@ const AppNavbar = () => {
 
         {currentUser ? (
           <div className="flex items-center gap-3">
-            <span className="hidden text-sm font-medium text-slate-700 sm:inline">
-              {currentUser.full_name}
-            </span>
-            {profileImageUrl ? (
-              <img
-                src={profileImageUrl}
-                alt={`${currentUser.full_name || "User"} profile image`}
-                className="h-10 w-10 rounded-full border border-slate-200 object-cover"
-              />
-            ) : (
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-slate-600">
-                <User className="h-5 w-5" aria-hidden="true" />
-              </span>
-            )}
+            <Link
+              href={PRODUCT_ROUTE}
+              className=" text-slate-600 transition hover:bg-slate-100 hover:text-slate-800"
+              aria-label="Open products"
+            >
+              <ShoppingCart className="h-6 w-6" aria-hidden="true" />
+            </Link>
+
+            <ProfileMenuModal
+              currentUser={currentUser}
+              profileImageUrl={profileImageUrl}
+              onLoggedOut={() => setCurrentUser(null)}
+            />
           </div>
         ) : (
           <div className="flex items-center gap-3">
