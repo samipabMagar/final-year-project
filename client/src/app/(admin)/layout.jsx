@@ -1,6 +1,42 @@
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import axios from "axios";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-export default function AdminLayout({ children }) {
+const getCurrentUserFromApi = async (token) => {
+  try {
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+
+    const response = await axios.get(`${apiBase}/users/profile`, {
+      headers: {
+        Cookie: `token=${token}`,
+      },
+    });
+
+    return response.data?.data || null;
+  } catch {
+    return null;
+  }
+};
+
+export default async function AdminLayout({ children }) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+
+  if (!token) {
+    redirect("/login");
+  }
+
+  const currentUser = await getCurrentUserFromApi(token);
+
+  if (!currentUser) {
+    redirect("/login");
+  }
+
+  if (currentUser.role !== "admin") {
+    redirect("/");
+  }
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-50">
       <div className="pointer-events-none absolute inset-0">
