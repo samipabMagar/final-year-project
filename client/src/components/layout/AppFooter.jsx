@@ -1,7 +1,20 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { HOME_ROUTE, PRODUCT_ROUTE } from "@/constants/routes";
 
 const AppFooter = () => {
+  const pathname = usePathname();
+  const hideFooter =
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/doctor/dashboard") ||
+    pathname.startsWith("/admin");
+
+  if (hideFooter) {
+    return null;
+  }
+
   return (
     <footer className="relative overflow-hidden border-t border-slate-800 bg-slate-900 text-slate-300">
       <div className="pointer-events-none absolute inset-0">

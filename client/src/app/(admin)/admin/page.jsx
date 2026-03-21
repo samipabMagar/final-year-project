@@ -27,7 +27,7 @@ const AdminDashboardPage = () => {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       <section className="rounded-2xl border border-slate-200/80 bg-white/90 p-6 shadow-sm sm:p-8">
         <span
           className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold"

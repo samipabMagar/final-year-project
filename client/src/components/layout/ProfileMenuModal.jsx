@@ -7,8 +7,10 @@ import { LayoutDashboard, LogOut, Settings, User } from "lucide-react";
 import { authService } from "@/services/authService";
 import {
   ADMIN_DASHBOARD_ROUTE,
+  DOCTOR_DASHBOARD_ROUTE,
   HOME_ROUTE,
   LOGIN_ROUTE,
+  USER_DASHBOARD_ROUTE,
 } from "@/constants/routes";
 
 const ProfileMenuModal = ({ currentUser, profileImageUrl, onLoggedOut }) => {
@@ -17,7 +19,12 @@ const ProfileMenuModal = ({ currentUser, profileImageUrl, onLoggedOut }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const dashboardHref = currentUser?.role === "admin" ? ADMIN_DASHBOARD_ROUTE : HOME_ROUTE;
+  const dashboardHref =
+    currentUser?.role === "admin"
+      ? ADMIN_DASHBOARD_ROUTE
+      : currentUser?.role === "doctor"
+      ? DOCTOR_DASHBOARD_ROUTE
+      : USER_DASHBOARD_ROUTE;
 
   useEffect(() => {
     const handleOutsideClick = (event) => {

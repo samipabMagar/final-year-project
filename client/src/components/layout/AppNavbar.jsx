@@ -2,13 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import {
-  LucideShoppingBag,
-  ShoppingBag,
-  ShoppingBagIcon,
-  ShoppingBasket,
-  ShoppingCart,
-} from "lucide-react";
+import { usePathname } from "next/navigation";
+import { ShoppingCart } from "lucide-react";
 import { authService } from "@/services/authService";
 import ProfileMenuModal from "@/components/layout/ProfileMenuModal";
 import {
@@ -48,7 +43,13 @@ const resolveProfileImageUrl = (profileImagePath) => {
 };
 
 const AppNavbar = () => {
+  const pathname = usePathname();
   const [currentUser, setCurrentUser] = useState(null);
+
+  const hideNavbar =
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/doctor/dashboard") ||
+    pathname.startsWith("/admin");
 
   useEffect(() => {
     const loadCurrentUser = async () => {
@@ -63,6 +64,10 @@ const AppNavbar = () => {
     () => resolveProfileImageUrl(currentUser?.profile_image),
     [currentUser?.profile_image],
   );
+
+  if (hideNavbar) {
+    return null;
+  }
 
   return (
     <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/90 backdrop-blur">

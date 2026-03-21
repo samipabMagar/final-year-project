@@ -3,34 +3,21 @@
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { ShoppingBag, ClipboardCheck, Stethoscope, LogOut, House } from "lucide-react";
-import { ROUTES } from "@/constants/routes";
+import { CalendarDays, ClipboardList, House, LogOut, MessageSquare, Package } from "lucide-react";
 import { authService } from "@/services/authService";
+import { ROUTES } from "@/constants/routes";
 
-const AdminSidebar = () => {
+const UserSidebar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const menuItems = [
-    {
-      label: "Products",
-      href: ROUTES.ADMIN_PRODUCTS,
-      icon: ShoppingBag,
-      match: "startsWith",
-    },
-    {
-      label: "Pending Doctors",
-      href: ROUTES.ADMIN_PENDING_DOCTORS,
-      icon: ClipboardCheck,
-      match: "exact",
-    },
-    {
-      label: "All Doctors",
-      href: ROUTES.ADMIN_ALL_DOCTORS,
-      icon: Stethoscope,
-      match: "exact",
-    },
+    { label: "Overview", href: ROUTES.USER_DASHBOARD, icon: Package },
+    { label: "Appointments", href: `${ROUTES.USER_DASHBOARD}#appointments`, icon: CalendarDays },
+    { label: "Orders", href: `${ROUTES.USER_DASHBOARD}#orders`, icon: Package },
+    { label: "Treatments", href: `${ROUTES.USER_DASHBOARD}#treatments`, icon: ClipboardList },
+    { label: "Messages", href: `${ROUTES.USER_DASHBOARD}#messages`, icon: MessageSquare },
   ];
 
   const handleLogout = async () => {
@@ -47,13 +34,9 @@ const AdminSidebar = () => {
   return (
     <aside className="z-30 w-full border-b border-[#1D7D82] bg-[#2FA4A9] lg:fixed lg:left-0 lg:top-0 lg:flex lg:h-screen lg:w-72 lg:flex-col lg:border-b-0 lg:border-r">
       <div className="px-6 pb-4 pt-6 lg:pb-6">
-        <p className="text-xs font-semibold uppercase tracking-wider text-white/85">
-          Administration
-        </p>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight text-white">
-          eDermaCare
-        </h1>
-        <p className="mt-2 text-sm text-white/85">Manage doctors and products from one place.</p>
+        <p className="text-xs font-semibold uppercase tracking-wider text-white/85">Patient Area</p>
+        <h1 className="mt-1 text-2xl font-bold tracking-tight text-white">My Dashboard</h1>
+        <p className="mt-2 text-sm text-white/85">Track appointments, orders, and treatment updates.</p>
         <Link
           href={ROUTES.HOME}
           className="mt-4 inline-flex items-center gap-2 rounded-lg bg-white/15 px-3 py-2 text-xs font-medium text-white transition hover:bg-white/25"
@@ -66,22 +49,19 @@ const AdminSidebar = () => {
       <nav className="mx-2 flex gap-2 rounded-2xl bg-white/10 p-2 shadow-sm overflow-x-auto px-4 pb-4 lg:block lg:space-y-2 lg:overflow-visible lg:px-4">
         {menuItems.map((item) => {
           const Icon = item.icon;
-          const isActive =
-            item.match === "startsWith"
-              ? pathname === item.href || pathname.startsWith(`${item.href}/`)
-              : pathname === item.href;
+          const isActive = pathname === ROUTES.USER_DASHBOARD && item.label === "Overview";
 
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`group flex border-b border-white/30 shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition lg:w-full ${
+              className={`group flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition lg:w-full ${
                 isActive
                   ? "bg-white text-[#1D7D82] shadow-sm"
                   : "text-white/90 hover:bg-white/15 hover:text-white"
               }`}
             >
-              <Icon className={`h-4 w-4 ${isActive ? "text-[#1D7D82]" : "text-white/85 group-hover:text-white"}`} />
+              <Icon className="h-4 w-4" />
               <span>{item.label}</span>
             </Link>
           );
@@ -103,4 +83,4 @@ const AdminSidebar = () => {
   );
 };
 
-export default AdminSidebar;
+export default UserSidebar;
