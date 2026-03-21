@@ -1,42 +1,50 @@
 "use client";
 
 import { adminService } from "@/services/adminService";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { toast } from "react-toastify";
 import { Loader2, Search } from "lucide-react";
 
 const AllDoctorsTable = () => {
+  const [allDoctors, setAllDoctors] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [filterAvailable, setFilterAvailable] = useState("");
+  const [filterAvailable, setFilterAvailable] = useState("all");
 
   const getDoctorName = (doctor) => doctor?.user?.full_name || doctor?.full_name || "N/A";
   const getDoctorEmail = (doctor) => doctor?.user?.email || doctor?.email || "N/A";
+
+  const filteredDoctors = useMemo(() => {
+    const searchValue = search.trim().toLowerCase();
+
+    return allDoctors.filter((doctor) => {
+      const matchesAvailability =
+        filterAvailable === "all" ||
+        doctor.is_available === (filterAvailable === "true");
+
+      const matchesSearch =
+        !searchValue ||
+        getDoctorName(doctor).toLowerCase().includes(searchValue) ||
+        doctor.specialization?.toLowerCase().includes(searchValue);
+
+      return matchesAvailability && matchesSearch;
+    });
+  }, [allDoctors, filterAvailable, search]);
 
   useEffect(() => {
     fetchDoctors();
   }, []);
 
-  const fetchDoctors = async (name = "", available = "") => {
+  useEffect(() => {
+    setDoctors(filteredDoctors);
+  }, [filteredDoctors]);
+
+  const fetchDoctors = async () => {
     try {
       setLoading(true);
-      const filters = {};
-      if (available) filters.is_available = available === "true";
-
-      const data = await adminService.getAllDoctors(filters);
-
-      // Filter by search term
-      let filtered = data;
-      if (name) {
-        filtered = data.filter(
-          (doctor) =>
-            getDoctorName(doctor).toLowerCase().includes(name.toLowerCase()) ||
-            doctor.specialization?.toLowerCase().includes(name.toLowerCase())
-        );
-      }
-
-      setDoctors(filtered);
+      const data = await adminService.getAllDoctors();
+      setAllDoctors(data);
     } catch (error) {
       toast.error(error.message || "Failed to fetch doctors");
     } finally {
@@ -46,12 +54,10 @@ const AllDoctorsTable = () => {
 
   const handleSearch = (value) => {
     setSearch(value);
-    fetchDoctors(value, filterAvailable);
   };
 
   const handleFilterChange = (value) => {
     setFilterAvailable(value);
-    fetchDoctors(search, value);
   };
 
   if (loading) {
@@ -89,7 +95,7 @@ const AllDoctorsTable = () => {
           onChange={(e) => handleFilterChange(e.target.value)}
           className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-700 outline-none focus:border-(--brand-primary) focus:ring-2 focus:ring-(--brand-primary-soft)"
         >
-          <option value="">All Availability</option>
+          <option value="all">All Availability</option>
           <option value="true">Available</option>
           <option value="false">Unavailable</option>
         </select>
