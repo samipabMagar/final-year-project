@@ -6,7 +6,7 @@ import { ClipboardCheck } from "lucide-react";
 
 const PendingDoctorsPage = () => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <AdminPageHeader
         badge="Doctor Approvals"
         icon={ClipboardCheck}

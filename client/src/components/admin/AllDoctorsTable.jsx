@@ -63,7 +63,7 @@ const AllDoctorsTable = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6">
+    <div className="p-4 sm:p-3">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-3">
         <div>
           <h3 className="text-sm font-semibold text-slate-900">Doctor Directory</h3>

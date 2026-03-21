@@ -124,7 +124,7 @@ const HomeSections = () => {
             </div>
             <Link
               href={REGISTER_ROUTE}
-              className="inline-flex items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-[#1D7D82] transition hover:bg-slate-100"
+              className="flex items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-[#1D7D82] transition hover:bg-slate-100"
             >
               <CheckCircle2 className="h-4 w-4" />
               Join eDermaCare

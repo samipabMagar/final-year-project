@@ -6,7 +6,7 @@ import { Stethoscope } from "lucide-react";
 
 const AllDoctorsPage = () => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <AdminPageHeader
         badge="Doctors"
         icon={Stethoscope}
