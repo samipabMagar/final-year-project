@@ -19,7 +19,12 @@ const __dirname = path.dirname(__filename);
 const uploadsDir = path.resolve(__dirname, "../uploads");
 
 // Security Middleware
-app.use(helmet());
+// Allow frontend (different origin/port) to load uploaded images safely.
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  }),
+);
 
 // CORS Configuration
 const corsOptions = {

@@ -41,7 +41,7 @@ const AdminSidebar = () => {
         <p className="mt-2 text-sm text-slate-600">Manage doctors and products from one place.</p>
       </div>
 
-      <nav className="flex gap-2 overflow-x-auto px-4 pb-4 lg:block lg:space-y-2 lg:overflow-visible lg:px-4">
+      <nav className="flex gap-2 shadow-sm rounded-2xl mx-2 p-2 overflow-x-auto px-4 pb-4 lg:block lg:space-y-2 lg:overflow-visible lg:px-4">
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive =
@@ -55,8 +55,8 @@ const AdminSidebar = () => {
               href={item.href}
               className={`group flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition lg:w-full ${
                 isActive
-                  ? "bg-[var(--brand-primary)] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                  ? "bg-brand-primary text-white shadow-sm"
+                  : "text-slate-600 border-b border-[#25888d]/50 hover:bg-slate-100   hover:text-slate-900"
               }`}
             >
               <Icon className={`h-4 w-4 ${isActive ? "text-white" : "text-slate-500 group-hover:text-slate-900"}`} />

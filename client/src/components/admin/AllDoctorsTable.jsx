@@ -11,6 +11,9 @@ const AllDoctorsTable = () => {
   const [search, setSearch] = useState("");
   const [filterAvailable, setFilterAvailable] = useState("");
 
+  const getDoctorName = (doctor) => doctor?.user?.full_name || doctor?.full_name || "N/A";
+  const getDoctorEmail = (doctor) => doctor?.user?.email || doctor?.email || "N/A";
+
   useEffect(() => {
     fetchDoctors();
   }, []);
@@ -28,7 +31,7 @@ const AllDoctorsTable = () => {
       if (name) {
         filtered = data.filter(
           (doctor) =>
-            doctor.full_name?.toLowerCase().includes(name.toLowerCase()) ||
+            getDoctorName(doctor).toLowerCase().includes(name.toLowerCase()) ||
             doctor.specialization?.toLowerCase().includes(name.toLowerCase())
         );
       }
@@ -54,7 +57,7 @@ const AllDoctorsTable = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-[var(--brand-primary)]" />
+        <Loader2 className="h-8 w-8 animate-spin text-(--brand-primary)" />
       </div>
     );
   }
@@ -114,8 +117,8 @@ const AllDoctorsTable = () => {
             ) : (
               doctors.map((doctor) => (
                 <tr key={doctor.user_id} className="border-b border-slate-200 last:border-b-0 hover:bg-slate-50">
-                  <td className="px-6 py-4 font-medium text-slate-900">{doctor.full_name}</td>
-                  <td className="px-6 py-4 text-slate-600">{doctor.email || "N/A"}</td>
+                  <td className="px-6 py-4 font-medium text-slate-900">{getDoctorName(doctor)}</td>
+                  <td className="px-6 py-4 text-slate-600">{getDoctorEmail(doctor)}</td>
                   <td className="px-6 py-4 text-slate-700">{doctor.specialization}</td>
                   <td className="px-6 py-4 text-xs">
                     <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-medium text-sky-800">

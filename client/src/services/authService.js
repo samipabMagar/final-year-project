@@ -42,4 +42,14 @@ export const authService = {
       throw new Error(getApiErrorMessage(error, "Login failed"));
     }
   },
+
+  // get currently logged in user from cookie session
+  async getCurrentUser() {
+    try {
+      const response = await api.get("/users/profile");
+      return response.data?.data ?? null;
+    } catch {
+      return null;
+    }
+  },
 };
