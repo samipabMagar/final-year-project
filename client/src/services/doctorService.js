@@ -25,7 +25,7 @@ const buildQueryParams = (filters = {}) => {
 export const doctorService = {
   async getDoctors(filters = {}) {
     try {
-      const response = await api.get("/doctor-profiles", {
+      const response = await api.get("/doctors", {
         params: buildQueryParams(filters),
       });
 
