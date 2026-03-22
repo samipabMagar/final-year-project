@@ -7,6 +7,7 @@ import { ShoppingCart } from "lucide-react";
 import { authService } from "@/services/authService";
 import ProfileMenuModal from "@/components/layout/ProfileMenuModal";
 import {
+  DOCTORS_ROUTE,
   HOME_ROUTE,
   LOGIN_ROUTE,
   PRODUCT_ROUTE,
@@ -18,6 +19,7 @@ const navLinks = [
   { href: `${HOME_ROUTE}#services`, label: "Services" },
   { href: `${HOME_ROUTE}#how-it-works`, label: "How It Works" },
   { href: `${HOME_ROUTE}#why-us`, label: "Why Us" },
+  { href: DOCTORS_ROUTE, label: "Doctors" },
   { href: PRODUCT_ROUTE, label: "Products" },
 ];
 

@@ -7,7 +7,7 @@ const Button = React.forwardRef(
         type={type}
         ref={ref}
         disabled={disabled || loading}
-        className={`px-6 py-2 bg-[#2FA4A9] text-white rounded-lg font-medium hover:bg-[#25888d] transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${className}`}
+        className={`px-6 py-2 bg-[#2FA4A9] cursor-pointer text-white rounded-lg font-medium hover:bg-[#25888d] transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${className}`}
         {...props}
       >
         {loading && (

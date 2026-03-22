@@ -35,13 +35,13 @@ const PasswordInput = React.forwardRef(
           <input
             ref={ref}
             type={showPassword ? "text" : "password"}
-            className={`${inputClass} ${error ? "border-red-500 focus:ring-red-500 focus:border-red-500" : ""} ${className}`}
+            className={`${inputClass} ${error ? "border-red-500  focus:ring-red-500 focus:border-red-500" : ""} ${className}`}
             {...props}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#2FA4A9]"
+            className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#2FA4A9]"
           >
             {showPassword ? (
               <Eye className="w-5 h-5" />

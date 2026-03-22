@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {
+  DOCTORS_ROUTE,
   HOME_ROUTE,
   LOGIN_ROUTE,
   PRODUCT_ROUTE,
@@ -18,6 +19,7 @@ const HomeNavbar = () => {
           <a href="#services" className="hover:text-slate-900 transition">Services</a>
           <a href="#how-it-works" className="hover:text-slate-900 transition">How It Works</a>
           <a href="#why-us" className="hover:text-slate-900 transition">Why Us</a>
+          <Link href={DOCTORS_ROUTE} className="hover:text-slate-900 transition">Doctors</Link>
           <Link href={PRODUCT_ROUTE} className="hover:text-slate-900 transition">Products</Link>
         </nav>
 

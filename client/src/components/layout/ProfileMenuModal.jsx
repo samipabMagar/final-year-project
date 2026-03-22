@@ -56,7 +56,7 @@ const ProfileMenuModal = ({ currentUser, profileImageUrl, onLoggedOut }) => {
       await authService.logout();
       onLoggedOut?.();
       setMenuOpen(false);
-      router.push(LOGIN_ROUTE);
+      router.push(HOME_ROUTE);
       router.refresh();
     } finally {
       setIsLoggingOut(false);

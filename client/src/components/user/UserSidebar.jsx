@@ -73,7 +73,7 @@ const UserSidebar = () => {
           type="button"
           onClick={handleLogout}
           disabled={isLoggingOut}
-          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-white/90 transition hover:bg-white/15 hover:text-white disabled:cursor-not-allowed disabled:opacity-70"
+          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-white/90 transition hover:bg-red-500/80 cursor-pointer hover:text-white disabled:cursor-not-allowed disabled:opacity-70"
         >
           <LogOut className="h-4 w-4" aria-hidden="true" />
           {isLoggingOut ? "Logging out..." : "Logout"}
