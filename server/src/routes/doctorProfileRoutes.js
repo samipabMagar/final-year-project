@@ -10,9 +10,8 @@ import { authorize } from "../middlewares/authorizeMiddleware.js";
 
 const router = express.Router();
 
-// Get all doctors
+// Get all doctors (public)
 router.get("/", doctorProfileController.getAllDoctors);
-router.get("/:userId", doctorProfileController.getDoctorByUserId);
 
 // Doctor registration route (Public)
 router.post(
@@ -20,6 +19,8 @@ router.post(
   validate(registerDoctorSchema),
   doctorProfileController.registerDoctor,
 );
+
+// Logged-in doctor's own profile routes — MUST be before /:userId
 router.get(
   "/profile",
   authenticate,
@@ -35,7 +36,7 @@ router.put(
 );
 router.patch("/profile/availability", authenticate, authorize("doctor"), doctorProfileController.updateAvailability);
 
-// Admin routes for managing doctor registrations
+// Admin routes for managing doctor registrations — MUST be before /:userId
 router.get(
   "/admin/pending",
   authenticate,
@@ -54,5 +55,8 @@ router.put(
   authorize("admin"),
   doctorProfileController.rejectDoctorRegistration,
 );
+
+// Dynamic route — must come LAST to avoid shadowing static paths
+router.get("/:userId", doctorProfileController.getDoctorByUserId);
 
 export default router;
