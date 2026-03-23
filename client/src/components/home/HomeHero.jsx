@@ -1,75 +1,7 @@
-import Link from "next/link";
-import { CalendarClock, ShoppingBag, Stethoscope } from "lucide-react";
-import { LOGIN_ROUTE, REGISTER_ROUTE } from "@/constants/routes";
+// HomeHero now simply renders the HeroSlider.
+// All slide content and logic lives in HeroSlider.jsx.
+import HeroSlider from "@/components/home/HeroSlider";
 
-const HomeHero = () => {
-  return (
-    <section className="relative overflow-hidden bg-linear-to-br from-[#E6F7F7]  to-[#F2FBFB]">
-      <div className="absolute -left-20 top-10 h-56 w-56 rounded-full bg-[#2FA4A9]/20 blur-3xl" />
-      <div className="absolute -right-20 bottom-0 h-64 w-64 rounded-full bg-emerald-200/40 blur-3xl" />
-
-      <div className="relative mx-auto grid w-full max-w-7xl gap-10 px-6 py-16 md:grid-cols-2 md:py-24">
-        <div>
-          <span className="inline-flex items-center rounded-full bg-[#2FA4A9]/10 px-3 py-1 text-xs font-semibold text-[#1D7D82]">
-            Trusted Dermatology Care
-          </span>
-          <h1 className="mt-5 text-4xl font-extrabold leading-tight text-slate-900 md:text-5xl">
-            Your skin deserves expert care you can trust.
-          </h1>
-          <p className="mt-5 max-w-xl text-base leading-7 text-slate-600">
-            Talk to verified dermatologists, discover quality products, and follow a clear care plan in one easy platform made for real results.
-          </p>
-
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href={REGISTER_ROUTE}
-              className="rounded-lg bg-[#2FA4A9] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#25888d]"
-            >
-              Create Free Account
-            </Link>
-            <Link
-              href={LOGIN_ROUTE}
-              className="rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
-            >
-              Sign In
-            </Link>
-          </div>
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          <article className="rounded-2xl bg-linear-to-r from-[#c7eded]  to-[#a9dddd]  p-5 shadow-sm sm:col-span-2">
-            <div className="mb-3 inline-flex rounded-lg bg-[#2FA4A9]/10 p-2 text-[#2FA4A9]">
-              <Stethoscope className="h-5 w-5" />
-            </div>
-            <h3 className="text-lg font-semibold text-slate-900">Expert Dermatologists</h3>
-            <p className="mt-2 text-sm text-slate-600">
-              Connect with experienced dermatologists through a guided consultation process that helps you understand your skin and make confident treatment decisions.
-            </p>
-          </article>
-
-          <article className="rounded-2xl  bg-linear-to-r from-[#c7eded]  to-[#a9dddd] p-5 shadow-sm">
-            <div className="mb-3 inline-flex rounded-lg bg-[#2FA4A9]/10 p-2 text-[#2FA4A9]">
-              <ShoppingBag className="h-5 w-5" />
-            </div>
-            <h3 className="text-base font-semibold text-slate-900">Product Store</h3>
-            <p className="mt-1 text-sm text-slate-600">
-              Discover carefully selected skincare essentials that match different skin needs and help you build a routine you can trust every day.
-            </p>
-          </article>
-
-          <article className="rounded-2xl bg-linear-to-r from-[#c7eded]  to-[#a9dddd] p-5 shadow-sm">
-            <div className="mb-3 inline-flex rounded-lg bg-[#2FA4A9]/10 p-2 text-[#2FA4A9]">
-              <CalendarClock className="h-5 w-5" />
-            </div>
-            <h3 className="text-base font-semibold text-slate-900">Smart Booking</h3>
-            <p className="mt-1 text-sm text-slate-600">
-              Schedule consultations in just a few clicks with flexible time slots that fit your routine and keep your skincare journey moving.
-            </p>
-          </article>
-        </div>
-      </div>
-    </section>
-  );
-};
+const HomeHero = () => <HeroSlider />;
 
 export default HomeHero;
