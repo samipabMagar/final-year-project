@@ -132,8 +132,8 @@ const SlideContent = ({ slide }) => (
 // ── Stats bar shown below the slides ────────────────────────
 const StatItem = ({ value, label }) => (
   <div className="text-center">
-    <p className="text-xl font-extrabold text-white">{value}</p>
-    <p className="text-xs font-medium text-teal-200">{label}</p>
+    <p className="text-2xl font-extrabold text-[#1D7D82]">{value}</p>
+    <p className="text-xs font-medium text-slate-500">{label}</p>
   </div>
 );
 
@@ -157,14 +157,14 @@ const HeroSlider = () => (
     </Swiper>
 
     {/* Stats bar */}
-    <div className="bg-gradient-to-r from-[#0D4F52] to-[#1A7A7F]">
+    <div className="border-b border-slate-100 bg-white">
       <div className="mx-auto flex w-full max-w-7xl flex-wrap justify-around gap-6 px-6 py-5">
         <StatItem value="500+" label="Verified Doctors" />
-        <div className="hidden w-px self-stretch bg-white/20 sm:block" />
+        <div className="hidden w-px self-stretch bg-slate-200 sm:block" />
         <StatItem value="10,000+" label="Happy Patients" />
-        <div className="hidden w-px self-stretch bg-white/20 sm:block" />
+        <div className="hidden w-px self-stretch bg-slate-200 sm:block" />
         <StatItem value="5,000+" label="Skincare Products" />
-        <div className="hidden w-px self-stretch bg-white/20 sm:block" />
+        <div className="hidden w-px self-stretch bg-slate-200 sm:block" />
         <StatItem value="4.9★" label="Average Rating" />
       </div>
     </div>
