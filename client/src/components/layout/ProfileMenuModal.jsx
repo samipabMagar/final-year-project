@@ -23,27 +23,20 @@ const ProfileMenuModal = ({ currentUser, profileImageUrl, onLoggedOut }) => {
     currentUser?.role === "admin"
       ? ADMIN_DASHBOARD_ROUTE
       : currentUser?.role === "doctor"
-      ? DOCTOR_DASHBOARD_ROUTE
-      : USER_DASHBOARD_ROUTE;
+        ? DOCTOR_DASHBOARD_ROUTE
+        : USER_DASHBOARD_ROUTE;
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      if (!menuRef.current || menuRef.current.contains(event.target)) {
-        return;
-      }
-
+      if (!menuRef.current || menuRef.current.contains(event.target)) return;
       setMenuOpen(false);
     };
-
     const handleEscape = (event) => {
-      if (event.key === "Escape") {
-        setMenuOpen(false);
-      }
+      if (event.key === "Escape") setMenuOpen(false);
     };
 
     document.addEventListener("mousedown", handleOutsideClick);
     document.addEventListener("keydown", handleEscape);
-
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
       document.removeEventListener("keydown", handleEscape);
@@ -63,12 +56,23 @@ const ProfileMenuModal = ({ currentUser, profileImageUrl, onLoggedOut }) => {
     }
   };
 
+  const initials = currentUser?.full_name
+    ?.split(" ")
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
   return (
     <div className="relative" ref={menuRef}>
       <button
         type="button"
         onClick={() => setMenuOpen((prev) => !prev)}
-        className="relative rounded-full cursor-pointer  p-0.5 shadow-sm transition "
+        className={`relative rounded-full cursor-pointer transition-all duration-200 ring-2 ${
+          menuOpen
+            ? "ring-[#2FA4A9] ring-offset-2"
+            : "ring-transparent hover:ring-[#2FA4A9] hover:ring-offset-2"
+        }`}
         aria-haspopup="dialog"
         aria-expanded={menuOpen}
         aria-label="Open profile menu"
@@ -76,69 +80,90 @@ const ProfileMenuModal = ({ currentUser, profileImageUrl, onLoggedOut }) => {
         {profileImageUrl ? (
           <img
             src={profileImageUrl}
-            alt={`${currentUser?.full_name || "User"} profile image`}
-            className="h-10 w-10 rounded-full border-3 border-gray-300  object-cover"
+            alt={`${currentUser?.full_name || "User"} profile`}
+            className="h-9 w-9 rounded-full object-cover"
           />
         ) : (
-          <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-slate-600">
-            <User className="h-5 w-5" aria-hidden="true" />
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#e8f7f8] text-[#2FA4A9] font-semibold text-sm">
+            {initials || <User className="h-4 w-4" />}
           </span>
         )}
       </button>
 
-      {menuOpen && (
-        <div
-          role="dialog"
-          aria-label="Profile menu"
-          className="absolute right-0 top-full z-50 mt-2 w-72 rounded-xl border border-slate-200 bg-white p-3 shadow-lg"
-        >
-          <div className="rounded-lg bg-slate-50 px-3 py-2">
-            <p className="text-sm font-semibold text-slate-900">{currentUser?.full_name}</p>
-            <p className="mt-0.5 truncate text-xs text-slate-600">{currentUser?.email}</p>
+      <div
+        role="dialog"
+        aria-label="Profile menu"
+        className={`absolute right-0 top-full z-50 mt-2 w-72 rounded-2xl border border-slate-200 bg-white shadow-xl transition-all duration-200 origin-top-right ${
+          menuOpen
+            ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+            : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+        }`}
+      >
+        <div className="rounded-t-2xl bg-gradient-to-br from-[#e8f7f8] to-[#f0fafb] px-4 py-3 border-b border-slate-100">
+          <div className="flex items-center gap-3">
+            {profileImageUrl ? (
+              <img
+                src={profileImageUrl}
+                alt={currentUser?.full_name}
+                className="h-10 w-10 rounded-full object-cover border-2 border-white shadow-sm"
+              />
+            ) : (
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#2FA4A9] text-white font-semibold text-sm shadow-sm">
+                {initials || <User className="h-4 w-4" />}
+              </span>
+            )}
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-slate-900 truncate">
+                {currentUser?.full_name}
+              </p>
+              <p className="text-xs text-slate-500 truncate">
+                {currentUser?.email}
+              </p>
+            </div>
           </div>
+        </div>
 
-          <div className="mt-3 space-y-1">
-            <Link
-              href={HOME_ROUTE}
-              onClick={() => setMenuOpen(false)}
-              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100"
-            >
-              <User className="h-4 w-4" aria-hidden="true" />
-              Profile
-            </Link>
+        <div className="p-2 space-y-0.5">
+          <Link
+            href={HOME_ROUTE}
+            onClick={() => setMenuOpen(false)}
+            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-700 transition-colors hover:bg-[#e8f7f8] hover:text-[#2FA4A9]"
+          >
+            <User className="h-4 w-4 shrink-0" aria-hidden="true" />
+            Profile
+          </Link>
 
-            <Link
-              href={dashboardHref}
-              onClick={() => setMenuOpen(false)}
-              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100"
-            >
-              <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
-              Dashboard
-            </Link>
+          <Link
+            href={dashboardHref}
+            onClick={() => setMenuOpen(false)}
+            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-700 transition-colors hover:bg-[#e8f7f8] hover:text-[#2FA4A9]"
+          >
+            <LayoutDashboard className="h-4 w-4 shrink-0" aria-hidden="true" />
+            Dashboard
+          </Link>
 
-            <button
-              type="button"
-              onClick={() => setMenuOpen(false)}
-              className="flex cursor-pointer w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-slate-700 transition hover:bg-slate-100"
-            >
-              <Settings className="h-4 w-4" aria-hidden="true" />
-              Settings
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => setMenuOpen(false)}
+            className="flex cursor-pointer w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm text-slate-700 transition-colors hover:bg-[#e8f7f8] hover:text-[#2FA4A9]"
+          >
+            <Settings className="h-4 w-4 shrink-0" aria-hidden="true" />
+            Settings
+          </button>
+        </div>
 
-          <div className="my-2 border-t border-slate-200" />
-
+        <div className="p-2 border-t border-slate-100">
           <button
             type="button"
             onClick={handleLogout}
             disabled={isLoggingOut}
-            className="flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-rose-600 transition hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-70"
+            className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            <LogOut className="h-4 w-4" aria-hidden="true" />
-            {isLoggingOut ? "Logging out..." : "Logout"}
+            <LogOut className="h-4 w-4 shrink-0" aria-hidden="true" />
+            {isLoggingOut ? "Logging out…" : "Logout"}
           </button>
         </div>
-      )}
+      </div>
     </div>
   );
 };

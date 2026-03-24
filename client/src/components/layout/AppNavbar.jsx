@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
-import { ShoppingCart } from "lucide-react";
+import { Menu, ShoppingCart, X } from "lucide-react";
 import { authService } from "@/services/authService";
 import ProfileMenuModal from "@/components/layout/ProfileMenuModal";
 import {
@@ -47,6 +47,8 @@ const resolveProfileImageUrl = (profileImagePath) => {
 const AppNavbar = () => {
   const pathname = usePathname();
   const [currentUser, setCurrentUser] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const hideNavbar =
     pathname.startsWith("/dashboard") ||
@@ -54,11 +56,20 @@ const AppNavbar = () => {
     pathname.startsWith("/admin");
 
   useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
     const loadCurrentUser = async () => {
       const user = await authService.getCurrentUser();
       setCurrentUser(user);
     };
-
     loadCurrentUser();
   }, []);
 
@@ -67,79 +78,156 @@ const AppNavbar = () => {
     [currentUser?.profile_image],
   );
 
-  if (hideNavbar) {
-    return null;
-  }
+  if (hideNavbar) return null;
 
   return (
-    <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4">
-        <Link
-          href={HOME_ROUTE}
-          className="text-xl font-bold tracking-tight text-slate-900"
-        >
-          eDermaCare
+    <header
+      className={`sticky top-0 z-30 transition-all duration-300 ${
+        scrolled
+          ? "bg-white/95 shadow-md backdrop-blur-md border-b border-slate-200/60"
+          : "bg-white/90 border-b border-slate-200/80 backdrop-blur"
+      }`}
+    >
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-3">
+        <Link href={HOME_ROUTE} className="flex items-center">
+          <span className="text-xl font-bold tracking-tight">
+            <span className="text-[#2FA4A9]">e</span>
+            <span className="text-slate-800">Derma</span>
+            <span className="text-[#2FA4A9]">Care</span>
+          </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="transition hover:text-slate-900"
-            >
-              {link.label}
-            </Link>
-          ))}
+        <nav className="hidden items-center gap-1 text-sm font-semibold text-slate-600 md:flex">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`relative px-3 py-2 rounded-lg transition-colors duration-200 group ${
+                  isActive
+                    ? "text-[#2FA4A9] font-semibold"
+                    : "hover:text-[#2FA4A9] hover:bg-[#e8f7f8]"
+                }`}
+              >
+                {link.label}
+
+                <span
+                  className={`absolute bottom-1 left-3 right-3 h-0.5 rounded-full bg-[#2FA4A9] transition-transform duration-200 origin-left ${
+                    isActive
+                      ? "scale-x-100"
+                      : "scale-x-0 group-hover:scale-x-100"
+                  }`}
+                />
+              </Link>
+            );
+          })}
         </nav>
 
-        {currentUser ? (
-          <div className="flex items-center gap-3">
-            <Link
-              href={PRODUCT_ROUTE}
-              className=" text-slate-600 transition hover:bg-slate-100 hover:text-slate-800"
-              aria-label="Open products"
-            >
-              <ShoppingCart className="h-6 w-6" aria-hidden="true" />
-            </Link>
+        <div className="hidden md:flex items-center gap-3">
+          {currentUser ? (
+            <>
+              <Link
+                href={PRODUCT_ROUTE}
+                className="p-2 rounded-lg text-slate-500 transition-colors hover:text-[#2FA4A9] hover:bg-[#e8f7f8]"
+                aria-label="Open products"
+              >
+                <ShoppingCart className="h-5 w-5" aria-hidden="true" />
+              </Link>
+              <ProfileMenuModal
+                currentUser={currentUser}
+                profileImageUrl={profileImageUrl}
+                onLoggedOut={() => setCurrentUser(null)}
+              />
+            </>
+          ) : (
+            <>
+              <Link
+                href={LOGIN_ROUTE}
+                className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-[#2FA4A9] hover:text-[#2FA4A9]"
+              >
+                Sign In
+              </Link>
+              <Link
+                href={REGISTER_ROUTE}
+                className="rounded-lg bg-[#2FA4A9] px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-[#25888d] hover:shadow-md active:scale-95"
+              >
+                Get Started
+              </Link>
+            </>
+          )}
+        </div>
 
-            <ProfileMenuModal
-              currentUser={currentUser}
-              profileImageUrl={profileImageUrl}
-              onLoggedOut={() => setCurrentUser(null)}
-            />
-          </div>
-        ) : (
-          <div className="flex items-center gap-3">
-            <Link
-              href={LOGIN_ROUTE}
-              className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-            >
-              Sign In
-            </Link>
-            <Link
-              href={REGISTER_ROUTE}
-              className="rounded-lg bg-[#2FA4A9] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#25888d]"
-            >
-              Get Started
-            </Link>
-          </div>
-        )}
+        <button
+          type="button"
+          onClick={() => setMobileOpen((prev) => !prev)}
+          className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition"
+          aria-label="Toggle mobile menu"
+          aria-expanded={mobileOpen}
+        >
+          {mobileOpen ? (
+            <X className="h-5 w-5" />
+          ) : (
+            <Menu className="h-5 w-5" />
+          )}
+        </button>
       </div>
 
-      <nav className="border-t border-slate-200 px-6 py-3 md:hidden">
-        <div className="mx-auto flex w-full max-w-7xl items-center gap-3 overflow-x-auto text-sm font-medium text-slate-600">
-          {navLinks.map((link) => (
-            <Link
-              key={`mobile-${link.href}`}
-              href={link.href}
-              className="whitespace-nowrap rounded-full bg-slate-100 px-3 py-1.5 transition hover:bg-slate-200"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      </nav>
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+          mobileOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <nav className="border-t border-slate-100 bg-white px-4 py-3 space-y-1">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={`mobile-${link.href}`}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className={`flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                  isActive
+                    ? "bg-[#e8f7f8] text-[#2FA4A9] font-semibold"
+                    : "text-slate-600 hover:bg-slate-50 hover:text-[#2FA4A9]"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+
+          <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
+            {currentUser ? (
+              <Link
+                href={PRODUCT_ROUTE}
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:text-[#2FA4A9] transition"
+              >
+                <ShoppingCart className="h-4 w-4" />
+                Products
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href={LOGIN_ROUTE}
+                  onClick={() => setMobileOpen(false)}
+                  className="block text-center rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:border-[#2FA4A9] hover:text-[#2FA4A9]"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href={REGISTER_ROUTE}
+                  onClick={() => setMobileOpen(false)}
+                  className="block text-center rounded-lg bg-[#2FA4A9] px-4 py-2.5 text-sm font-medium text-white transition hover:bg-[#25888d]"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
+          </div>
+        </nav>
+      </div>
     </header>
   );
 };
