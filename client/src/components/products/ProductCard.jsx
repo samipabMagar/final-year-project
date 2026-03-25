@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { ShoppingCart, Star, Package } from "lucide-react";
+import Link from "next/link";
+import { Eye, ShoppingCart, Star, Package } from "lucide-react";
 import {
   formatCategory,
   getFirstImagePath,
@@ -55,7 +55,7 @@ const ProductCard = ({ product }) => {
   const inStock = (product.stock_quantity ?? 0) > 0;
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-teal-900/10">
+    <Link href={`/products/${product.product_id}`} className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-teal-900/10">
       <div className="relative overflow-hidden bg-gradient-to-br from-[#E8F7F8] to-[#DDF2F3]">
         {imageUrl ? (
           <img
@@ -76,6 +76,7 @@ const ProductCard = ({ product }) => {
       </div>
 
       <div className="flex flex-1 flex-col gap-2 p-4">
+   
         <div className="flex items-center justify-between">
           <span className="text-xs font-medium text-[#2FA4A9]">
             {product.brand?.name || "No brand"}
@@ -83,26 +84,39 @@ const ProductCard = ({ product }) => {
           <StockBadge qty={product.stock_quantity ?? 0} />
         </div>
 
+
         <h3 className="line-clamp-1 text-[15px] font-bold leading-snug text-slate-900">
           {product.name}
         </h3>
 
-        <StarRating rating={product.rating ?? 0} />
+   
+        <div className="flex items-center justify-between">
+          <p className="text-xl font-extrabold text-[#1D7D82]">
+            Rs {Number(product.price).toFixed(0)}
+          </p>
+          <StarRating rating={product.rating ?? 0} />
+        </div>
 
-        <div className="mt-auto pt-2 border-t border-slate-100 flex items-center justify-between gap-3">
-          <div>
-            <p className="text-[11px] font-medium text-slate-400">Price</p>
-            <p className="text-xl font-extrabold text-[#1D7D82]">
-              Rs {Number(product.price).toFixed(0)}
-            </p>
-          </div>
+ 
+        <div className="mt-auto flex gap-2">
 
+          <Link
+            href={`/products/${product.product_id}`}
+            onClick={(e) => e.stopPropagation()}
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-[#2FA4A9]/50 py-2.5 text-xs font-bold text-[#2FA4A9] transition hover:bg-[#E8F7F8] active:scale-95"
+          >
+            <Eye className="h-3.5 w-3.5" />
+            Details
+          </Link>
+
+      
           <button
             type="button"
             disabled={!inStock}
-            className={`inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-xs font-bold tracking-wide shadow-sm transition-all duration-200 ${
+            onClick={(e) => e.preventDefault()}
+            className={`flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-bold tracking-wide shadow-sm transition-all duration-200 ${
               inStock
-                ? "bg-[#2FA4A9] text-white hover:bg-[#1D7D82] hover:shadow-md hover:shadow-teal-600/30 active:scale-95"
+                ? "bg-[#2FA4A9] text-white hover:bg-[#1D7D82] active:scale-95"
                 : "cursor-not-allowed bg-slate-100 text-slate-400"
             }`}
           >
@@ -111,7 +125,7 @@ const ProductCard = ({ product }) => {
           </button>
         </div>
       </div>
-    </article>
+    </Link>
   );
 };
 

@@ -35,6 +35,16 @@ export const productService = {
     }
   },
 
+  // Fetch a single product by its ID  →  GET /api/products/:id
+  async getProductById(id) {
+    try {
+      const response = await api.get(`/products/${id}`);
+      return response.data?.data ?? null;
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error, "Product not found"));
+    }
+  },
+
   async getBrands() {
     try {
       const response = await api.get("/brands");
@@ -44,3 +54,4 @@ export const productService = {
     }
   },
 };
+
