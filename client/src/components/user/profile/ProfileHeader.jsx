@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { User } from "lucide-react";
+import AvatarUpload from "./AvatarUpload";
 
 const ProfileHeader = ({ user }) => {
   const apiBase =
@@ -13,18 +13,9 @@ const ProfileHeader = ({ user }) => {
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-4">
       <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-start">
-        <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-teal-100 bg-teal-50 shadow">
-          {avatarSrc ? (
-            <Image
-              src={avatarSrc}
-              alt={`${user.full_name} profile photo`}
-              fill
-              className="object-cover"
-            />
-          ) : (
-            <User className="h-12 w-12 text-teal-400" aria-hidden="true" />
-          )}
-        </div>
+
+  
+        <AvatarUpload currentAvatarSrc={avatarSrc} userName={user.full_name} />
 
         <div className="text-center sm:text-left">
           <h2 className="text-2xl font-bold text-slate-900">
