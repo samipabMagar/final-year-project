@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { CalendarDays, ClipboardList, House, LogOut, MessageSquare, Package } from "lucide-react";
+import { CalendarDays, ClipboardList, House, LogOut, MessageSquare, Package, UserCircle } from "lucide-react";
 import { authService } from "@/services/authService";
 import { ROUTES } from "@/constants/routes";
 
@@ -14,6 +14,7 @@ const UserSidebar = () => {
 
   const menuItems = [
     { label: "Overview", href: ROUTES.USER_DASHBOARD, icon: Package },
+    { label: "Profile", href: ROUTES.USER_PROFILE, icon: UserCircle },
     { label: "Appointments", href: `${ROUTES.USER_DASHBOARD}#appointments`, icon: CalendarDays },
     { label: "Orders", href: `${ROUTES.USER_DASHBOARD}#orders`, icon: Package },
     { label: "Treatments", href: `${ROUTES.USER_DASHBOARD}#treatments`, icon: ClipboardList },
@@ -49,7 +50,11 @@ const UserSidebar = () => {
       <nav className="mx-2 flex gap-2 rounded-2xl bg-white/10 p-2 shadow-sm overflow-x-auto px-4 pb-4 lg:block lg:space-y-2 lg:overflow-visible lg:px-4">
         {menuItems.map((item) => {
           const Icon = item.icon;
-          const isActive = pathname === ROUTES.USER_DASHBOARD && item.label === "Overview";
+          // A link is active if the current page path matches its href exactly
+          const isActive =
+            item.href === ROUTES.USER_DASHBOARD
+              ? pathname === ROUTES.USER_DASHBOARD
+              : pathname === item.href;
 
           return (
             <Link

@@ -7,6 +7,12 @@ const nextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        // Allow profile images served from the local API server
+        protocol: "http",
+        hostname: "localhost",
+        port: "8000",
+      },
     ],
   },
 };

@@ -11,6 +11,7 @@ import {
   HOME_ROUTE,
   LOGIN_ROUTE,
   USER_DASHBOARD_ROUTE,
+  USER_PROFILE_ROUTE,
 } from "@/constants/routes";
 
 const ProfileMenuModal = ({ currentUser, profileImageUrl, onLoggedOut }) => {
@@ -125,7 +126,7 @@ const ProfileMenuModal = ({ currentUser, profileImageUrl, onLoggedOut }) => {
 
         <div className="p-2 space-y-0.5">
           <Link
-            href={HOME_ROUTE}
+            href={USER_PROFILE_ROUTE}
             onClick={() => setMenuOpen(false)}
             className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-700 transition-colors hover:bg-[#e8f7f8] hover:text-[#2FA4A9]"
           >

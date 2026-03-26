@@ -153,13 +153,13 @@ const ProductInfoPanel = ({ product }) => {
         <button
           type="button"
           disabled={!inStock}
-          className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold tracking-wide transition-all duration-200 ${
+          className={`flex cursor-pointer flex-1 items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold tracking-wide transition-all duration-200 ${
             inStock
               ? "bg-[#2FA4A9] text-white hover:bg-[#1D7D82] hover:shadow-md hover:shadow-teal-600/25 active:scale-95"
               : "cursor-not-allowed bg-slate-100 text-slate-400"
           }`}
         >
-          <ShoppingCart className="h-4 w-4" />
+          <ShoppingCart className="h-4  w-4" />
           {inStock ? "Add to Cart" : "Out of Stock"}
         </button>
 
@@ -167,9 +167,9 @@ const ProductInfoPanel = ({ product }) => {
         {inStock && (
           <button
             type="button"
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-[#2FA4A9] py-3 text-sm font-bold tracking-wide text-[#2FA4A9] transition-all duration-200 hover:bg-[#E8F7F8] active:scale-95"
+            className="flex cursor-pointer flex-1 items-center justify-center gap-2 rounded-xl border-2 border-[#2FA4A9] py-3 text-sm font-bold tracking-wide text-[#2FA4A9] transition-all duration-200 hover:bg-[#E8F7F8] active:scale-95"
           >
-            <Zap className="h-4 w-4" />
+           
             Buy Now
           </button>
         )}
@@ -178,7 +178,7 @@ const ProductInfoPanel = ({ product }) => {
 
       {inStock && product.stock_quantity <= 10 && (
         <p className="text-xs text-amber-600">
-          ⚡ Only <strong>{product.stock_quantity}</strong> units left — order soon!
+           Only <strong>{product.stock_quantity}</strong> units left — order soon!
         </p>
       )}
 
